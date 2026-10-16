@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบจัดการเนื้อหา (Admin Dashboard) - ROBOCART</title>
+  
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Font: Prompt & Sarabun -->
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #00bcd4;
+      --primary-theme: #00b4d8;
+      --bg-color: #f1f5f9;
+      --card-radius: 16px;
+      --checker-theme-color: #ff751f;
+    }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background-color: var(--bg-color);
+      color: #1e293b;
+      padding-bottom: 90px;
+    }
+
+    h1, h2, h3, h4, h5, h6, .font-heading {
+      font-family: 'Prompt', sans-serif;
+    }
+
+    .navbar {
+      background-color: #00b4d8;
+      padding: 12px 24px;
+      border-bottom: 3px solid #ffb703;
+    }
+
+    .admin-card-item {
+      border: 1px solid #e2e8f0;
+      border-radius: var(--card-radius);
+      background: #ffffff;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      transition: all 0.25s ease;
+      overflow: hidden;
+    }
+
+    .admin-card-header {
+      background-color: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 16px 20px;
+    }
+
+    .form-control, .form-select {
+      border-radius: 10px;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #0284c7;
+      box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.12);
+    }
+
+    .section-box-general {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+    }
+
+    .section-box-videos {
+      background: linear-gradient(135deg, #fffbf5 0%, #fff7ed 100%);
+      border: 1.5px solid #fed7aa;
+      border-radius: 12px;
+    }
+
+    .section-box-tasks {
+      background-color: #eff6ff;
+      border: 1.5px solid #bfdbfe;
+      border-radius: 12px;
+    }
+
+    .section-box-teacher {
+      background-color: #f0fdf4;
+      border: 1.5px dashed #34d399;
+      border-radius: 12px;
+    }
+
+    .floating-action-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid #cbd5e1;
+      padding: 12px 0;
+      z-index: 1000;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-save-all {
+      background: linear-gradient(135deg, #ff751f 0%, #e65c00 100%);
+      color: #ffffff;
+      font-family: 'Prompt', sans-serif;
+      font-weight: 600;
+      border: none;
+      box-shadow: 0 4px 14px rgba(255, 117, 31, 0.35);
+    }
+    .btn-save-all:hover {
+      background: linear-gradient(135deg, #e65c00 0%, #c2410c 100%);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold fs-4 d-flex align-items-center gap-2 text-white" href="index.html">
+      <i class="bi bi-robot fs-3 text-warning"></i> 
+      <span>ROBOCART <small class="fs-6 fw-normal text-warning">Admin Dashboard</small></span>
+    </a>
+    <a href="index.html" class="btn btn-light rounded-pill px-3 shadow-sm d-flex align-items-center gap-1 font-heading">
+      <i class="bi bi-house-door-fill text-primary"></i> กลับสู่หน้าหลัก
+    </a>
+  </div>
+</nav>
+
+<div class="container my-4">
+  <div id="authSection" class="row justify-content-center my-5">
+    <div class="col-md-6 col-lg-5">
+      <div class="card border-0 shadow-lg p-4" style="border-radius: var(--card-radius);">
+        <div class="text-center py-3">
+          <i class="bi bi-shield-lock-fill text-warning display-3"></i>
+          <h4 class="fw-bold mt-3 font-heading">เข้าสู่ระบบ Admin</h4>
+          <p class="text-muted small">กรอกรหัสผ่านเพื่อแก้ไขและปรับแต่งเนื้อหาบทเรียน</p>
+        </div>
+        <div class="mb-3">
+          <input type="password" class="form-control text-center fs-5 py-2" id="adminPassInput" placeholder="กรอกรหัสผ่าน Admin">
+        </div>
+        <div id="authAlert"></div>
+        <button class="btn btn-primary w-100 py-2 fs-6 font-heading" onclick="verifyAdminPassword()">
+          เข้าสู่ระบบจัดการ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="editorSection" style="display: none;">
+    <div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 rounded-4 shadow-sm border">
+      <span class="badge bg-success text-white px-3 py-2 rounded-pill font-heading fs-6">
+        <i class="bi bi-check-circle-fill me-1"></i> เข้าสู่ระบบในฐานะ ผู้ดูแลระบบ
+      </span>
+      <span class="text-muted small"><i class="bi bi-info-circle me-1"></i> เมื่อแก้ไขข้อมูลเสร็จเรียบร้อยแล้ว อย่าลืมกดบันทึกที่แถบด้านล่าง</span>
+    </div>
+
+    <div id="adminFormArea"></div>
+  </div>
+</div>
+
+<div class="floating-action-bar" id="floatingBar" style="display: none;">
+  <div class="container d-flex justify-content-between align-items-center">
+    <span class="text-muted small d-none d-sm-inline">
+      <i class="bi bi-pencil-square me-1"></i> โหมดจัดการและปรับปรุงเนื้อหาบทเรียน
+    </span>
+    <div class="d-flex gap-2 ms-auto">
+      <a href="index.html" class="btn btn-outline-secondary rounded-pill px-4 font-heading">ยกเลิก</a>
+      <button class="btn btn-save-all rounded-pill px-4 font-heading shadow-sm" onclick="saveAdminData()">
+        <i class="bi bi-save me-1"></i> บันทึกการแก้ไขทั้งหมด
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxGW940He6iuNQYc2cjADRL6jWa1n5D2huSKH4x7dz8iTNRiFOm9HVijWXIq8aCgYJG/exec";
+  let lessonsData = [];
+
+  function verifyAdminPassword() {
+    let pass = document.getElementById('adminPassInput').value;
+    let alertDiv = document.getElementById('authAlert');
+
+    if (pass === 'admin1234') {
+      alertDiv.innerHTML = '';
+      fetchInitialData();
+    } else {
+      alertDiv.innerHTML = `<div class="alert alert-danger py-2 small rounded-3 mb-3">รหัสผ่านไม่ถูกต้อง!</div>`;
+    }
+  }
+
+  function fetchInitialData() {
+    fetch(GAS_API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "getInitialData" })
+    })
+    .then(res => res.json())
+    .then(data => {
+      lessonsData = data;
+      showAdminEditor();
+    })
+    .catch(err => console.error("Error loading data:", err));
+  }
+
+  function showAdminEditor() {
+    document.getElementById('authSection').style.display = 'none';
+    document.getElementById('editorSection').style.display = 'block';
+    document.getElementById('floatingBar').style.display = 'block';
+
+    let html = '';
+    lessonsData.forEach((l, i) => {
+      let chapNum = parseInt(l.id, 10);
+      let isChap1 = (chapNum === 1);
+      let isWorksheetFirst = (chapNum === 3 || chapNum === 4);
+
+      let mainVideoLink = (l.videos && l.videos.length > 0) ? l.videos[0] : '';
+      let missionVideoLink = l.missionVideo || (l.videos && l.videos[1] ? l.videos[1] : '');
+
+      let practiceText = '';
+      let worksheetText = '';
+      if (l.missionTasks && Array.isArray(l.missionTasks)) {
+        l.missionTasks.forEach(t => {
+          if (t.type === 'practice' || (t.tag && t.tag.includes('ปฏิบัติ'))) {
+            practiceText = t.text;
+          } else if (t.type === 'worksheet' || (t.tag && t.tag.includes('ใบงาน'))) {
+            worksheetText = t.text;
+          }
+        });
+      }
+
+      let practiceInputHtml = `
+        <div class="col-md-12">
+          <label class="form-label small fw-bold mb-1 text-dark">
+            <span class="badge bg-warning text-dark me-1 font-heading">กิจกรรมปฏิบัติ</span> รายละเอียดงานเขียนโค้ด / ต่อวงจร (เว้นว่างไว้หากไม่มี)
+          </label>
+          <input type="text" class="form-control bg-white border-primary-subtle" id="taskPractice_${i}" value="${practiceText}" placeholder="เช่น นักเรียนต้อง coding ให้หุ่นเคลื่อนไหว...">
+        </div>
+      `;
+
+      let worksheetInputHtml = `
+        <div class="col-md-12">
+          <label class="form-label small fw-bold mb-1 text-dark">
+            <span class="badge bg-primary text-white me-1 font-heading">กิจกรรมใบงาน</span> รายละเอียดงานในใบงาน / วางแผน (เว้นว่างไว้หากไม่มี)
+          </label>
+          <input type="text" class="form-control bg-white border-primary-subtle" id="taskWorksheet_${i}" value="${worksheetText}" placeholder="เช่น นักเรียนบันทึกผลการทดลองในใบงาน...">
+        </div>
+      `;
+
+      let teacherColClass = isChap1 ? "col-md-4" : "col-md-6 col-lg-3";
+
+      html += `
+        <div class="admin-card-item mb-4">
+          <div class="admin-card-header d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold text-dark font-heading mb-0">
+              <span class="badge bg-primary me-2 font-heading px-3 py-2 rounded-pill">บทที่ ${l.id}</span> ${l.title}
+            </h5>
+            <span class="badge bg-white text-secondary border">Chapter ID: ${l.id}</span>
+          </div>
+          
+          <div class="p-4">
+            <div class="section-box-general p-3 mb-4">
+              <h6 class="fw-bold text-primary font-heading mb-3 d-flex align-items-center gap-2">
+                <i class="bi bi-card-text"></i> 1. ข้อมูลบทเรียนและเอกสารประกอบ
+              </h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold mb-1">ชื่อบทเรียน</label>
+                  <input type="text" class="form-control bg-white" id="title_${i}" value="${l.title || ''}">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-bold mb-1"><i class="bi bi-file-earmark-arrow-down text-success me-1"></i>ลิงก์ดาวน์โหลดใบงานนักเรียน (Google Drive)</label>
+                  <input type="text" class="form-control bg-white" id="work_${i}" value="${l.worksheetUrl || ''}" placeholder="https://drive.google.com/...">
+                </div>
+                <div class="col-12">
+                  <label class="form-label small fw-bold mb-1">รายละเอียดคำอธิบายบทเรียน</label>
+                  <textarea class="form-control bg-white" id="desc_${i}" rows="2">${l.desc || ''}</textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-box-videos p-3 mb-4">
+              <h6 class="fw-bold text-warning-emphasis font-heading mb-3 d-flex align-items-center gap-2">
+                <i class="bi bi-play-circle-fill text-danger fs-5"></i> 2. สื่อวิดีโอ 3 ส่วนประจำบทเรียน (YouTube Links)
+              </h6>
+              <div class="row g-3">
+                <div class="col-md-12">
+                  <label class="form-label small fw-bold mb-1 text-danger">
+                    <i class="bi bi-film me-1"></i> (ส่วนที่ 1) ลิงก์การ์ตูนสถานการณ์จำลอง (ชวนคิดก่อนเริ่มบทเรียน)
+                  </label>
+                  <input type="text" class="form-control bg-white border-warning-subtle" id="scenarioVid_${i}" value="${l.scenarioVideo || ''}" placeholder="https://www.youtube.com/watch?v=...">
+                </div>
+
+                <div class="col-md-12">
+                  <label class="form-label small fw-bold mb-1 text-primary">
+                    <i class="bi bi-youtube me-1"></i> (ส่วนที่ 2) ลิงก์วิดีโอทบทวนเนื้อหาประกอบการเรียนรู้หลัก
+                  </label>
+                  <input type="text" class="form-control bg-white border-primary-subtle" id="vid_${i}" value="${mainVideoLink}" placeholder="https://www.youtube.com/watch?v=...">
+                </div>
+
+                <div class="col-md-12">
+                  <label class="form-label small fw-bold mb-1 text-success">
+                    <i class="bi bi-flag-fill me-1"></i> (ส่วนที่ 3) ลิงก์การ์ตูนมอบหมายภารกิจ (โจทย์ภารกิจท้าทาย)
+                  </label>
+                  <input type="text" class="form-control bg-white border-success-subtle" id="missionVid_${i}" value="${missionVideoLink}" placeholder="https://www.youtube.com/watch?v=...">
+                </div>
+              </div>
+            </div>
+
+            <div class="section-box-tasks p-3 mb-4">
+              <h6 class="fw-bold text-primary font-heading mb-3 d-flex align-items-center gap-2">
+                <i class="bi bi-check2-square text-primary fs-5"></i> 3. รายละเอียดภารกิจมอบหมายประจำบทเรียน (แสดงใต้คลิปที่ 3)
+              </h6>
+              <div class="row g-3">
+                ${isWorksheetFirst ? (worksheetInputHtml + practiceInputHtml) : (practiceInputHtml + worksheetInputHtml)}
+              </div>
+            </div>
+
+            <div class="section-box-teacher p-3">
+              <h6 class="fw-bold text-success font-heading mb-3 d-flex align-items-center gap-2">
+                <i class="bi bi-person-badge"></i> 4. สื่อคู่มือ เกณฑ์ประเมิน และเฉลยสำหรับผู้สอน (Teacher Mode)
+              </h6>
+              <div class="row g-3">
+                <div class="${teacherColClass}">
+                  <label class="form-label small fw-bold mb-1"><i class="bi bi-file-earmark-pdf text-danger me-1"></i>PDF คู่มือคำชี้แจงผู้สอน</label>
+                  <input type="text" class="form-control bg-white" id="teacherPdf_${i}" value="${l.teacherPdfUrl || ''}" placeholder="https://drive.google.com/...">
+                </div>
+                <div class="${teacherColClass}">
+                  <label class="form-label small fw-bold mb-1"><i class="bi bi-file-earmark-check text-success me-1"></i>เฉลยใบงานกิจกรรม</label>
+                  <input type="text" class="form-control bg-white" id="answerSheet_${i}" value="${l.answerSheetUrl || ''}" placeholder="https://drive.google.com/...">
+                </div>
+                <div class="${teacherColClass}">
+                  <label class="form-label small fw-bold mb-1"><i class="bi bi-clipboard2-data text-warning me-1"></i>เกณฑ์คะแนนประเมิน (Rubric)</label>
+                  <input type="text" class="form-control bg-white" id="rubric_${i}" value="${l.rubricUrl || ''}" placeholder="https://drive.google.com/...">
+                </div>
+                <div class="${teacherColClass}" style="${isChap1 ? 'display:none;' : ''}">
+                  <label class="form-label small fw-bold mb-1"><i class="bi bi-code-slash text-primary me-1"></i>ลิงก์ MakeCode เฉลย</label>
+                  <input type="text" class="form-control bg-white" id="solutionCode_${i}" value="${l.solutionCodeUrl || ''}" placeholder="https://makecode.microbit.org/...">
+                </div>
+                <div class="col-12" style="${isChap1 ? 'display:none;' : ''}">
+                  <label class="form-label small fw-bold mb-1 text-dark">
+                    <i class="bi bi-image text-info me-1"></i>ลิงก์รูปภาพ หรือ Path รูปภาพ Block Code เฉลย (Direct URL)
+                  </label>
+                  <input type="text" class="form-control bg-white" id="solutionImg_${i}" value="${l.solutionImgUrl || ''}" placeholder="เช่น code_unit2.jpg หรือ https://i.imgur.com/your-image.png">
+                  <span class="text-muted small">💡 คำแนะนำ: นำไฟล์รูปไปใส่ไว้ใน GitHub หรือเว็บฝากรูป แล้วนำลิงก์มาวาง</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    document.getElementById('adminFormArea').innerHTML = html;
+  }
+
+  function saveAdminData() {
+    let pass = document.getElementById('adminPassInput').value;
+    let updated = lessonsData.map((l, i) => {
+      let chapNum = parseInt(l.id, 10);
+      l.title = document.getElementById(`title_${i}`).value;
+      l.desc = document.getElementById(`desc_${i}`).value;
+      l.worksheetUrl = document.getElementById(`work_${i}`).value;
+      
+      l.scenarioVideo = document.getElementById(`scenarioVid_${i}`).value;
+      let reviewVid = document.getElementById(`vid_${i}`).value.trim();
+      let missionVidInput = document.getElementById(`missionVid_${i}`).value.trim();
+
+      l.missionVideo = missionVidInput;
+      l.videos = [];
+      if (reviewVid) l.videos.push(reviewVid);
+      if (missionVidInput) l.videos.push(missionVidInput);
+      
+      l.missionTasks = [];
+      let practiceVal = document.getElementById(`taskPractice_${i}`).value.trim();
+      let worksheetVal = document.getElementById(`taskWorksheet_${i}`).value.trim();
+      
+      // บทที่ 3 และ 4 ให้บันทึก "กิจกรรมใบงาน" ขึ้นก่อน "กิจกรรมปฏิบัติ"
+      if (chapNum === 3 || chapNum === 4) {
+        if (worksheetVal) {
+          l.missionTasks.push({ type: "worksheet", tag: "กิจกรรมใบงาน", text: worksheetVal });
+        }
+        if (practiceVal) {
+          l.missionTasks.push({ type: "practice", tag: "กิจกรรมปฏิบัติ", text: practiceVal });
+        }
+      } else {
+        if (practiceVal) {
+          l.missionTasks.push({ type: "practice", tag: "กิจกรรมปฏิบัติ", text: practiceVal });
+        }
+        if (worksheetVal) {
+          l.missionTasks.push({ type: "worksheet", tag: "กิจกรรมใบงาน", text: worksheetVal });
+        }
+      }
+
+      l.teacherPdfUrl = document.getElementById(`teacherPdf_${i}`).value;
+      l.answerSheetUrl = document.getElementById(`answerSheet_${i}`).value;
+      l.rubricUrl = document.getElementById(`rubric_${i}`).value;
+      l.solutionCodeUrl = document.getElementById(`solutionCode_${i}`).value;
+      l.solutionImgUrl = document.getElementById(`solutionImg_${i}`).value;
+      return l;
+    });
+
+    fetch(GAS_API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "saveLessonData", updatedData: updated, password: pass })
+    })
+    .then(res => res.json())
+    .then(res => {
+      alert(res.message);
+      if(res.success) {
+        window.location.href = "index.html";
+      }
+    })
+    .catch(err => {
+      alert("เกิดข้อผิดพลาดในการบันทึก: " + err.message);
+    });
+  }
+</script>
+</body>
+</html>

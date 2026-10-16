@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>สื่อการเรียนรู้หุ่นยนต์ ROBOCART</title>
+  
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Font: Prompt & Sarabun -->
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #00bcd4;
+      --bg-color: #e0e0e0;
+      --card-radius: 14px;
+      --checker-theme-color: #ff751f;
+    }
+    
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background-color: var(--bg-color);
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6, .font-heading {
+      font-family: 'Prompt', sans-serif;
+    }
+
+    /* Top Navbar */
+    .navbar {
+      background-color: #00b4d8;
+      padding: 12px 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .btn-wireframe-yellow {
+      background-color: #ffb703;
+      color: #000;
+      border-radius: 50px;
+      font-weight: 600;
+      padding: 8px 24px;
+      border: none;
+    }
+
+    .btn-wireframe-yellow:hover {
+      background-color: #fb8500;
+      color: #fff;
+    }
+
+    .btn-wireframe-gray {
+      background-color: #adb5bd;
+      color: #fff;
+      border-radius: 50px;
+      font-weight: 600;
+      padding: 8px 24px;
+      border: none;
+    }
+
+    .btn-wireframe-gray:hover {
+      background-color: #6c757d;
+      color: #fff;
+    }
+
+    /* Main Layout */
+    .main-wrapper {
+      width: 100%;
+      max-width: 1750px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .sidebar-card {
+      background-color: #ffb703;
+      border-radius: var(--card-radius);
+      padding: 16px;
+      min-height: 80vh;
+    }
+
+    .lesson-nav .nav-link {
+      color: #333;
+      font-weight: 600;
+      font-family: 'Prompt', sans-serif;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      transition: all 0.2s ease;
+      background-color: rgba(255, 255, 255, 0.4);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+    }
+
+    .lesson-nav .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.8);
+      color: #000;
+    }
+
+    .lesson-nav .nav-link.active {
+      background-color: #ffffff;
+      color: #000;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .lesson-nav .nav-link.home-tab {
+      background-color: rgba(255, 255, 255, 0.65);
+      border: 1.5px solid rgba(0, 0, 0, 0.08);
+      margin-bottom: 14px;
+    }
+
+    .lesson-nav .nav-link.home-tab.active {
+      background: linear-gradient(135deg, #0077b6 0%, #00b4d8 100%);
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+    .content-card-large {
+      background-color: #ffffff;
+      border-radius: var(--card-radius);
+      padding: 36px;
+      min-height: 80vh;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    /* 🏠 หน้าหลัก (Home Page) */
+    .home-hero-banner {
+      background: linear-gradient(135deg, #0077b6 0%, #00b4d8 55%, #48cae4 100%);
+      border-radius: 22px;
+      padding: 36px 32px;
+      color: #ffffff;
+      box-shadow: 0 12px 30px rgba(0, 180, 216, 0.25);
+    }
+
+    .home-chapter-pill {
+      background: #ffffff;
+      border: 2px solid #bae6fd;
+      border-radius: 16px;
+      padding: 16px 18px;
+      height: 100%;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+
+    .home-chapter-pill:hover {
+      transform: translateY(-4px);
+      border-color: #0284c7;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.15);
+    }
+
+    /* 🔽 Accordion ขั้นตอน 5 ขั้น */
+    .accordion-step-btn {
+      width: 100%;
+      text-align: left;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-left: 6px solid #00b4d8;
+      border-radius: 16px;
+      padding: 18px 22px;
+      margin-bottom: 12px;
+      font-family: 'Prompt', sans-serif;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #1e293b;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .accordion-step-btn:hover {
+      background-color: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .accordion-step-btn:not(.collapsed) {
+      background-color: #f0fdf4;
+      border-left-color: #10b981;
+      color: #065f46;
+    }
+
+    .step-number-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #ff9f1c 0%, #ff751f 100%);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 3px 8px rgba(255, 117, 31, 0.3);
+    }
+
+    .poster-showcase-card {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    .poster-showcase-card img {
+      width: 100%;
+      height: auto;
+      max-height: 600px;
+      border-radius: 14px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .hardware-card {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 18px;
+      padding: 22px 16px;
+      text-align: center;
+      height: 100%;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    }
+
+    .hardware-card:hover {
+      border-color: #ffb703;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.1);
+    }
+
+    .hardware-img-box {
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8fafc;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 14px;
+      overflow: hidden;
+      border: 1px solid #f1f5f9;
+    }
+
+    .hardware-img-box img {
+      max-height: 150px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    .level-config-card {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border: 2px solid #fde68a;
+      border-radius: 18px;
+      padding: 22px;
+      height: 100%;
+    }
+
+    /* Video Frame */
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      background: #000;
+    }
+    
+    .video-container iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 0;
+    }
+
+    .scenario-card-modern {
+      background: linear-gradient(135deg, #fff3eb 0%, #ffe5d9 100%);
+      border: 2px solid #ff9f1c;
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .scenario-badge {
+      background: linear-gradient(135deg, #ff9f1c 0%, #ff4000 100%);
+      color: #fff;
+      font-family: 'Prompt', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      padding: 8px 22px;
+      border-radius: 30px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .review-card-modern {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .mission-card-modern {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border: 2px solid #3b82f6;
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .mission-badge {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #fff;
+      font-family: 'Prompt', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      padding: 8px 22px;
+      border-radius: 30px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mission-detail-box {
+      background-color: #ffffff;
+      border: 2px solid #93c5fd;
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-top: 18px;
+    }
+
+    .task-item {
+      background-color: #f8fafc;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      border-left: 5px solid #3b82f6;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .task-item.coding {
+      border-left-color: #ff751f;
+      background-color: #fff7ed;
+    }
+
+    .task-badge-tag {
+      font-size: 0.85rem;
+      font-weight: 700;
+      font-family: 'Prompt', sans-serif;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .checker-hero-card {
+      background: linear-gradient(135deg, #ff751f 0%, #e65c00 100%);
+      border: 2px solid #ff9d5c;
+      border-radius: 20px;
+      padding: 28px;
+      color: #ffffff;
+      box-shadow: 0 12px 30px -5px rgba(255, 117, 31, 0.4);
+    }
+
+    .badge-check {
+      background-color: #ffffff;
+      color: var(--checker-theme-color);
+      font-family: 'Prompt', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 30px;
+    }
+
+    .btn-checker-submit {
+      background-color: #1e293b;
+      color: #ffffff;
+      font-family: 'Prompt', sans-serif;
+      font-weight: 600;
+      border-radius: 12px;
+      padding: 12px 28px;
+      border: none;
+    }
+
+    .feedback-box-wrapper {
+      background-color: #fffbeb;
+      border: 2px solid #fde68a;
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 18px;
+    }
+
+    .hint-card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+      border-left: 6px solid #f59e0b;
+    }
+
+    .hint-line-location {
+      font-family: 'Prompt', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #b45309;
+      margin-bottom: 6px;
+    }
+
+    .hint-line-finding {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #dc2626;
+      margin-bottom: 8px;
+    }
+
+    .hint-line-tip {
+      background-color: #fef3c7;
+      color: #92400e;
+      font-size: 0.98rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 8px;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .teacher-section {
+      background: #f0fdf4;
+      border: 2px dashed #10b981;
+      border-radius: var(--card-radius);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container-fluid px-3">
+    <a class="navbar-brand fw-bold fs-4 d-flex align-items-center gap-2 text-white" href="#" onclick="loadHomePage(); return false;">
+      <i class="bi bi-robot fs-3 text-warning"></i> 
+      <span>ROBOCART <small class="fs-6 fw-normal opacity-75">Learning Center</small></span>
+    </a>
+    
+    <div class="d-flex gap-2 ms-auto">
+      <button class="btn btn-wireframe-yellow d-flex align-items-center gap-1" id="btnTeacherLogin" onclick="openTeacherModal()">
+        <i class="bi bi-person-badge-fill"></i> โหมดคุณครู
+      </button>
+
+      <a href="admin.html" class="btn btn-wireframe-gray d-flex align-items-center gap-1 text-decoration-none">
+        <i class="bi bi-gear-fill"></i> จัดการระบบ
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- แถบแจ้งเตือนโหมดคุณครู -->
+<div class="container-fluid px-4 mt-3" id="teacherBadgeBar" style="display: none;">
+  <div class="alert alert-success d-flex justify-content-between align-items-center rounded-4 shadow-sm py-2 mb-0 border-0 bg-success text-white">
+    <span class="d-flex align-items-center gap-2">
+      <i class="bi bi-check-circle-fill fs-5"></i>
+      <div><strong>โหมดคุณครูทำงานอยู่:</strong> แสดงสื่อเอกสาร เกณฑ์การประเมิน และเฉลยเรียบร้อยแล้ว</div>
+    </span>
+    <button class="btn btn-sm btn-light text-danger rounded-pill fw-bold" onclick="logoutTeacher()">ออกจากโหมดคุณครู</button>
+  </div>
+</div>
+
+<!-- Main Wrapper -->
+<div class="main-wrapper">
+  <div class="row g-3">
+    <!-- ฝั่งซ้าย: สารบัญ -->
+    <div class="col-lg-2 col-md-3">
+      <div class="sidebar-card">
+        <h6 class="fw-bold mb-3 text-dark font-heading d-flex align-items-center gap-2">
+          <i class="bi bi-journal-bookmark"></i> สารบัญการเรียนรู้
+        </h6>
+        <div class="nav flex-column lesson-nav" id="lessonTabs" role="tablist"></div>
+      </div>
+    </div>
+
+    <!-- ฝั่งขวา: เนื้อหาหลัก -->
+    <div class="col-lg-10 col-md-9">
+      <div class="content-card-large" id="lessonContent">
+        <div class="text-center my-5 py-5">
+          <div class="spinner-border text-info" role="status"></div>
+          <p class="text-muted mt-3 fw-medium font-heading">กำลังโหลดเนื้อหา...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal ยืนยันตัวตนโหมดคุณครู -->
+<div class="modal fade" id="teacherModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg" style="border-radius: var(--card-radius);">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title fw-bold font-heading"><i class="bi bi-person-badge text-warning me-2"></i>เข้าสู่ระบบโหมดคุณครู</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4 text-center">
+        <i class="bi bi-shield-lock text-primary display-4 mb-3 d-block"></i>
+        <p class="text-muted small">กรอกรหัสผ่านผู้สอนเพื่อดูสื่อคู่มือ เกณฑ์คะแนนประเมิน และเฉลยกิจกรรม</p>
+        <input type="password" class="form-control text-center fs-5 mb-3" id="teacherPassInput" placeholder="กรอกรหัสผ่าน">
+        <div id="teacherAuthAlert"></div>
+        <button class="btn btn-primary w-100 py-2 font-heading" onclick="verifyTeacherPassword()">ยืนยันตัวตน</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxGW940He6iuNQYc2cjADRL6jWa1n5D2huSKH4x7dz8iTNRiFOm9HVijWXIq8aCgYJG/exec";
+  let lessonsData = [];
+  let currentLessonId = 'home';
+  let teacherModalObj = null;
+  let isTeacherLoggedIn = false;
+
+  const DEFAULT_MISSION_TASKS = {
+    1: [
+      { type: "practice", tag: "กิจกรรมปฏิบัติ", text: "นักเรียนเขียนโค้ดแสดงผลรูปไอคอนหัวใจและตัวอักษรชื่อตนเองบนหน้าจอ micro:bit" },
+      { type: "worksheet", tag: "กิจกรรมใบงาน", text: "บันทึกส่วนประกอบและหน้าที่ของบอร์ด micro:bit และหุ่นยนต์ ROBOCART" }
+    ],
+    2: [
+      { type: "practice", tag: "กิจกรรมปฏิบัติ", text: "นักเรียนต้อง coding ให้หุ่นเคลื่อนไหว ได้ 2 ทิศทาง (เพิ่มเติมจากวิดีโอที่สอน)" },
+      { type: "worksheet", tag: "กิจกรรมใบงาน", text: "นักเรียนต้องออกแบบเส้นทางให้หุ่นยนต์เพื่อหาทางออกตามแผนที่" }
+    ],
+    3: [
+      { type: "worksheet", tag: "กิจกรรมใบงาน", text: "บันทึกหลักการทำงานของเซนเซอร์ตรวจจับเส้น (IR Line Sensor) และวางแผนทิศทางการเลี้ยวของหุ่นยนต์" },
+      { type: "practice", tag: "กิจกรรมปฏิบัติ", text: "นักเรียนเขียนโปรแกรมอ่านค่าเซนเซอร์ IR เพื่อสั่งงานให้หุ่นยนต์วิ่งตามเส้นสีดำจนถึงจุดหมาย" }
+    ],
+    4: [
+      { type: "worksheet", tag: "กิจกรรมใบงาน", text: "บันทึกผลการทดลองระยะการตรวจจับและวิเคราะห์ทิศทางการหลบหลีก" },
+      { type: "practice", tag: "กิจกรรมปฏิบัติ", text: "นักเรียนเขียนโค้ดประมวลผลเซนเซอร์อัลตราโซนิก สั่งให้หุ่นยนต์หยุดหรือเลี้ยวหลบสิ่งกีดขวางในระยะ 15 cm" }
+    ]
+  };
+
+  window.onload = function() {
+    teacherModalObj = new bootstrap.Modal(document.getElementById('teacherModal'));
+    loadHomePage();
+    fetchInitialData();
+  };
+
+  function fetchInitialData() {
+    fetch(GAS_API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "getInitialData" })
+    })
+    .then(res => res.json())
+    .then(data => renderLessons(data))
+    .catch(err => {
+      console.error("Error loading data:", err);
+      renderLessons([]);
+    });
+  }
+
+  function renderLessons(data) {
+    lessonsData = data;
+    let tabs = `
+      <button class="nav-link home-tab ${currentLessonId === 'home' ? 'active' : ''}" id="tabBtn_home" onclick="loadHomePage(this)">
+        <span><i class="bi bi-house-heart-fill me-2"></i>หน้าหลัก</span>
+        <i class="bi bi-chevron-right small opacity-75"></i>
+      </button>
+      <hr class="my-2 opacity-25">
+    `;
+    data.forEach((l) => {
+      tabs += `
+        <button class="nav-link ${currentLessonId === l.id ? 'active' : ''}" id="tabBtn_${l.id}" onclick="loadLesson(${l.id}, this)">
+          <span>บทที่ ${l.id}</span>
+          <i class="bi bi-chevron-right small opacity-50"></i>
+        </button>`;
+    });
+    document.getElementById('lessonTabs').innerHTML = tabs;
+  }
+
+  // 🏠 หน้าหลัก
+  function loadHomePage(btnElem) {
+    currentLessonId = 'home';
+    document.querySelectorAll('#lessonTabs .nav-link').forEach(b => b.classList.remove('active'));
+    if (btnElem) {
+      btnElem.classList.add('active');
+    } else {
+      let homeBtn = document.getElementById('tabBtn_home');
+      if (homeBtn) homeBtn.classList.add('active');
+    }
+
+    let html = `
+      <!-- 1. Hero Banner -->
+      <div class="home-hero-banner mb-5">
+        <div class="row align-items-center g-4">
+          <div class="col-lg-8">
+            <span class="badge bg-warning text-dark font-heading px-3 py-2 rounded-pill mb-3 fs-6 shadow-sm">
+              <i class="bi bi-stars me-1"></i> สื่อการเรียนรู้หุ่นยนต์ช่วยสอน
+            </span>
+            <h1 class="fw-bold font-heading mb-3 display-6">
+              รูปแบบการจัดการเรียนรู้ โดยใช้หุ่นยนต์ช่วยสอน (ROBOCART)
+            </h1>
+            <h4 class="fw-medium font-heading opacity-90 mb-3">
+              เพื่อส่งเสริมทักษะการเขียนโปรแกรม และการคิดเชิงคำนวณ
+            </h4>
+            <p class="fs-5 mb-0 opacity-90 leading-relaxed">
+              ออกแบบการเรียนรู้สำหรับนักเรียนชั้นประถมศึกษาปีที่ 4 - 6 ผ่านกิจกรรมลงมือปฏิบัติจริง
+            </p>
+          </div>
+          <div class="col-lg-4 text-center">
+            <div class="bg-white bg-opacity-10 p-4 rounded-4 border border-white border-opacity-25">
+              <i class="bi bi-robot display-1 text-warning d-block mb-2"></i>
+              <div class="fw-bold font-heading fs-5">ROBOCART</div>
+              <small class="opacity-75">4 บทเรียน • 5 ขั้นตอนการสอน</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. โครงสร้าง 4 บทเรียน -->
+      <div class="mb-5">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <i class="bi bi-journal-code text-primary fs-3"></i>
+          <h3 class="fw-bold font-heading mb-0 text-dark">โครงสร้างเนื้อหาบทเรียน (4 บทเรียน)</h3>
+        </div>
+        <p class="text-secondary fs-5 mb-4">
+          รูปแบบการจัดการเรียนรู้โดยใช้หุ่นยนต์ช่วยสอน ประกอบด้วยเนื้อหา 4 บท ได้แก่ (คลิกเพื่อเข้าสู่บทเรียนได้ทันที)
+        </p>
+
+        <div class="row g-3">
+          <div class="col-md-6 col-lg-3">
+            <div class="home-chapter-pill" onclick="triggerLessonTab(1)">
+              <span class="badge bg-primary rounded-pill mb-2 px-3 py-1 font-heading">บทที่ 1</span>
+              <h6 class="fw-bold font-heading text-dark mb-1">แนะนำหุ่นยนต์และโปรแกรม MakeCode</h6>
+              <small class="text-muted">ส่วนประกอบพื้นฐานและการแสดงผลบน micro:bit</small>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="home-chapter-pill" onclick="triggerLessonTab(2)">
+              <span class="badge bg-warning text-dark rounded-pill mb-2 px-3 py-1 font-heading">บทที่ 2 • Level 1</span>
+              <h6 class="fw-bold font-heading text-dark mb-1">เขียนโปรแกรมควบคุมหุ่นยนต์เคลื่อนที่</h6>
+              <small class="text-muted">สั่งงานมอเตอร์เดินหน้า ถอยหลัง และหมุนเลี้ยว</small>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="home-chapter-pill" onclick="triggerLessonTab(3)">
+              <span class="badge bg-success rounded-pill mb-2 px-3 py-1 font-heading">บทที่ 3 • Level 2</span>
+              <h6 class="fw-bold font-heading text-dark mb-1">เขียนโปรแกรมหุ่นยนต์วิ่งตามเส้น</h6>
+              <small class="text-muted">ใช้เซนเซอร์ Maker Line ตรวจจับและเลี้ยวตามเส้น</small>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="home-chapter-pill" onclick="triggerLessonTab(4)">
+              <span class="badge bg-danger rounded-pill mb-2 px-3 py-1 font-heading">บทที่ 4 • Level 3</span>
+              <h6 class="fw-bold font-heading text-dark mb-1">เขียนโปรแกรมหุ่นยนต์หลบหลีกวัตถุ</h6>
+              <small class="text-muted">ใช้เซนเซอร์ Ultrasonic วัดระยะและหลบสิ่งกีดขวาง</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-5 opacity-25">
+
+      <!-- 3. ขั้นตอนการจัดการเรียนรู้ 5 ขั้นตอน (แบบกดดูเพิ่มเติม / Accordion) -->
+      <div class="mb-5">
+        <div class="d-flex align-items-center gap-2 mb-4">
+          <i class="bi bi-diagram-3-fill text-warning fs-3"></i>
+          <h3 class="fw-bold font-heading mb-0 text-dark">ขั้นตอนการจัดการเรียนรู้ (5 ขั้นตอน)</h3>
+          <span class="badge bg-light text-secondary border ms-auto"><i class="bi bi-hand-index-thumb me-1"></i> คลิกปุ่มเพื่อดูรายละเอียด</span>
+        </div>
+
+        <div class="row g-4 align-items-start">
+          <!-- คอลัมน์ซ้าย: รูปโปสเตอร์ ID.jpg ปรับความสูงไม่ให้ล้น -->
+          <div class="col-lg-5">
+            <div class="poster-showcase-card">
+              <img src="ID.jpg" 
+                   alt="รูปแบบการจัดการเรียนรู้ 5 ขั้นตอน" 
+                   style="max-height: 480px; width: auto; margin: 0 auto;"
+                   onerror="if(this.src.indexOf('ใบงาน.jpg')===-1){this.src='ใบงาน.jpg';}else{this.onerror=null;this.src='https://placehold.co/600x750/e0f2fe/0369a1?text=ID.jpg';}">
+              <div class="mt-2 small text-muted font-heading">
+                <i class="bi bi-image me-1"></i> แผนภาพรูปแบบการจัดการเรียนรู้ 5 ขั้นตอน
+              </div>
+            </div>
+          </div>
+
+          <!-- คอลัมน์ขวา: 5 หัวข้อหลัก พร้อมปุ่มกดดูเพิ่มเติม -->
+          <div class="col-lg-7">
+            
+            <!-- ขั้นที่ 1 -->
+            <div>
+              <button class="accordion-step-btn" type="button" data-bs-toggle="collapse" data-bs-target="#step1Collapse" aria-expanded="true">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="step-number-badge">1</span>
+                  <span>กำหนดสถานการณ์ปัญหา</span>
+                </div>
+                <i class="bi bi-chevron-down small text-muted"></i>
+              </button>
+              <div class="collapse show" id="step1Collapse">
+                <div class="card card-body border-0 bg-light rounded-4 mb-3 p-3">
+                  <p class="text-muted small mb-2">นำเสนอสถานการณ์เพื่อกระตุ้นให้ผู้เรียนเกิดความอยากรู้ และรู้สึกว่าปัญหาเป็นเรื่องใกล้ตัว</p>
+                  <div class="sub-step-item mb-2">
+                    <strong><i class="bi bi-film text-danger me-1"></i> ชมวิดีโอแอนิเมชันสถานการณ์ปัญหา:</strong> ผู้สอนเปิดวิดีโอแอนิเมชันสั้น ๆ ที่เล่าเรื่องตัวละครหรือหุ่นยนต์ที่กำลังเผชิญปัญหา
+                  </div>
+                  <div class="sub-step-item mb-0">
+                    <strong><i class="bi bi-question-circle-fill text-primary me-1"></i> ตั้งคำถามและระบุปัญหา:</strong> ผู้สอนตั้งคำถามกระตุ้นความคิด ให้ผู้เรียนช่วยกันระบุปัญหาและคิดวิธีแก้
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ขั้นที่ 2 -->
+            <div>
+              <button class="accordion-step-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step2Collapse" aria-expanded="false">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="step-number-badge">2</span>
+                  <span>นำเสนอความรู้</span>
+                </div>
+                <i class="bi bi-chevron-down small text-muted"></i>
+              </button>
+              <div class="collapse" id="step2Collapse">
+                <div class="card card-body border-0 bg-light rounded-4 mb-3 p-3">
+                  <p class="text-muted small mb-2">ให้ผู้เรียนมีความรู้และทักษะพื้นฐานเพียงพอ พร้อมสื่อวิดีโอทบทวนเนื้อหาดูซ้ำได้ทั้งในและนอกห้องเรียน</p>
+                  <div class="sub-step-item mb-2">
+                    <strong><i class="bi bi-book-half text-info me-1"></i> อธิบายหลักการทำงาน:</strong> อธิบายส่วนประกอบของหุ่นยนต์ เซนเซอร์ และแนวคิดลำดับ การวนซ้ำ เงื่อนไข ด้วยภาพและผังงาน
+                  </div>
+                  <div class="sub-step-item mb-0">
+                    <strong><i class="bi bi-laptop text-success me-1"></i> สาธิตการเขียนโปรแกรม:</strong> สาธิต MakeCode ทีละขั้นตอน ผู้เรียนเขียนตามและทดสอบกับตัวจำลองและหุ่นยนต์จริง
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ขั้นที่ 3 -->
+            <div>
+              <button class="accordion-step-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step3Collapse" aria-expanded="false">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="step-number-badge">3</span>
+                  <span>มอบหมายภารกิจ</span>
+                </div>
+                <i class="bi bi-chevron-down small text-muted"></i>
+              </button>
+              <div class="collapse" id="step3Collapse">
+                <div class="card card-body border-0 bg-light rounded-4 mb-3 p-3">
+                  <p class="text-muted small mb-2">ให้ผู้เรียนนำความรู้ไปประยุกต์แก้ปัญหาจริงและฝึกคิดอย่างเป็นระบบ</p>
+                  <div class="sub-step-item mb-2">
+                    <strong><i class="bi bi-flag-fill text-primary me-1"></i> ชมวิดีโอแอนิเมชันมอบภารกิจ:</strong> เปิดวิดีโอต่อเนื่องเพื่อมอบหมายภารกิจท้าทาย
+                  </div>
+                  <div class="sub-step-item mb-2">
+                    <strong><i class="bi bi-people-fill text-warning me-1"></i> ปฏิบัติภารกิจ:</strong> แบ่งกลุ่ม 2-3 คน ทำภารกิจเขียนโปรแกรมควบคุมหุ่นยนต์และทำใบงานควบคู่กัน
+                  </div>
+                  <div class="sub-step-item mb-0">
+                    <strong><i class="bi bi-cpu-fill text-danger me-1"></i> ทดสอบและตรวจสอบ:</strong> ตรวจสอบโค้ดผ่านระบบอัตโนมัติที่ให้คำใบ้ชวนคิดแบบค่อยเป็นค่อยไปโดยไม่บอกคำตอบตรงๆ
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ขั้นที่ 4 -->
+            <div>
+              <button class="accordion-step-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step4Collapse" aria-expanded="false">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="step-number-badge">4</span>
+                  <span>เชื่อมโยงผลกิจกรรม</span>
+                </div>
+                <i class="bi bi-chevron-down small text-muted"></i>
+              </button>
+              <div class="collapse" id="step4Collapse">
+                <div class="card card-body border-0 bg-light rounded-4 mb-3 p-3">
+                  <p class="text-muted small mb-2">เชื่อมโยงกับชีวิตจริงและฝึกทักษะ Soft Skills ผ่านการตอบคำถามในใบงาน</p>
+                  <div class="sub-step-item mb-2">
+                    <strong><i class="bi bi-list-check text-success me-1"></i> การทบทวนความเข้าใจ:</strong> สรุปลำดับขั้นตอนการทำงานตั้งแต่เริ่มต้นจนจบ เพื่อพัฒนาการคิดอย่างเป็นระบบ
+                  </div>
+                  <div class="sub-step-item mb-0">
+                    <strong><i class="bi bi-chat-heart-fill text-danger me-1"></i> ทักษะการทำงานเป็นทีม (Soft Skills):</strong> ประเมินการทำงานร่วมกันผ่านคำถามสะท้อนคิดเกี่ยวกับการแบ่งหน้าที่
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ขั้นที่ 5 -->
+            <div>
+              <button class="accordion-step-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#step5Collapse" aria-expanded="false">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="step-number-badge">5</span>
+                  <span>นำเสนออย่างสร้างสรรค์</span>
+                </div>
+                <i class="bi bi-chevron-down small text-muted"></i>
+              </button>
+              <div class="collapse" id="step5Collapse">
+                <div class="card card-body border-0 bg-light rounded-4 mb-0 p-3">
+                  <p class="text-muted small mb-2">สื่อสารสิ่งที่ได้เรียนรู้ด้วยตนเอง เพื่อเสริมความเข้าใจและความมั่นใจ</p>
+                  <div class="sub-step-item mb-0">
+                    <strong><i class="bi bi-easel2-fill text-primary me-1"></i> นำเสนอหน้าชั้นเรียน:</strong> ออกมาพูดเกี่ยวกับสิ่งที่ได้รับ ขั้นตอนวิธีคิด ปัญหาและวิธีแก้ไข โดยเลือกรูปแบบได้อย่างอิสระ เช่น สาธิตหุ่นยนต์ เล่าเรื่อง หรือใช้โปสเตอร์ประกอบ
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <hr class="my-5 opacity-25">
+
+      <!-- 4. หุ่นยนต์ ROBOCART และชิ้นส่วน -->
+      <div class="mb-5">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <i class="bi bi-cpu-fill text-info fs-3"></i>
+          <h3 class="fw-bold font-heading mb-0 text-dark">หุ่นยนต์ช่วยสอน ROBOCART และชิ้นส่วนประกอบ</h3>
+        </div>
+        <p class="text-secondary fs-5 mb-4 leading-relaxed">
+          <strong>หุ่นยนต์ช่วยสอน ROBOCART</strong> ออกแบบโครงสร้างเป็นรถสองล้อฐานสองชั้น ถอดประกอบชิ้นส่วนเซนเซอร์ได้ตามระดับบทเรียน ใช้บอร์ด <strong>micro:bit</strong> ร่วมกับบอร์ดขยาย <strong>REKA:BIT</strong> ที่รองรับการเขียนโปรแกรมแบบบล็อกคำสั่ง
+        </p>
+
+        <h5 class="fw-bold font-heading text-dark mb-3">
+          <i class="bi bi-tools text-warning me-2"></i>ชิ้นส่วนประกอบที่สำคัญ (9 ชิ้นส่วน)
+        </h5>
+        <div class="row g-3 mb-5">
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="hardware-card">
+              <div class="hardware-img-box">
+                <img src="Reka bit.jpg" alt="Reka bit" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <i class="bi bi-motherboard text-danger display-4" style="display:none;"></i>
+              </div>
+              <h6 class="fw-bold font-heading text-dark mb-1">1. บอร์ดขยายการทำงาน</h6>
+              <span class="badge bg-danger-subtle text-danger rounded-pill">REKA:BIT</span>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="hardware-card">
+              <div class="hardware-img-box">
+                <img src="Micro bit.jpg" alt="Micro bit" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <i class="bi bi-cpu text-primary display-4" style="display:none;"></i>
+              </div>
+              <h6 class="fw-bold font-heading text-dark mb-1">2. บอร์ดไมโครคอนโทรลเลอร์</h6>
+              <span class="badge bg-primary-subtle text-primary rounded-pill">micro:bit</span>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="hardware-card">
+              <div class="hardware-img-box">
+                <img src="MakerLine.jpg" alt="MakerLine" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <i class="bi bi-bezier2 text-purple display-4" style="display:none; color:#7e22ce;"></i>
+              </div>
+              <h6 class="fw-bold font-heading text-dark mb-1">3. เซนเซอร์ตรวจจับเส้น</h6>
+              <span class="badge bg-secondary-subtle text-dark rounded-pill">Maker Line</span>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="hardware-card">
+              <div class="hardware-img-box">
+                <img src="Ultrasonic.jpg" alt="Ultrasonic" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <i class="bi bi-broadcast text-info display-4" style="display:none;"></i>
+              </div>
+              <h6 class="fw-bold font-heading text-dark mb-1">4. เซนเซอร์อัลตราโซนิก</h6>
+              <span class="badge bg-info-subtle text-info-emphasis rounded-pill">Ultrasonic Sensor</span>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="hardware-card">
+              <div class="hardware-img-box">
+                <img src="Servo.jpg" alt="Servo" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <i class="bi bi-gear-wide-connected text-primary display-4" style="display:none;"></i>
+              </div>
+              <h6 class="fw-bold font-heading text-dark mb-1">5. มอเตอร์เซอร์โว</h6>
+              <span class="badge bg-primary-subtle text-primary rounded-pill">Servo</span>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="hardware-card">
+              <div class="hardware-img-box">
+                <img src="Motor.jpg" alt="Motor" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <i class="bi bi-lightning-charge-fill text-warning display-4" style="display:none;"></i>
+              </div>
+              <h6 class="fw-bold font-heading text-dark mb-1">6. มอเตอร์เกียร์กระแสตรง</h6>
+              <span class="badge bg-warning-subtle text-dark rounded-pill">DC Motor</span>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="hardware-card">
+              <div class="hardware-img-box">
+                <img src="Wheel.jpg" alt="Wheel" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <i class="bi bi-vinyl-fill text-dark display-4" style="display:none;"></i>
+              </div>
+              <h6 class="fw-bold font-heading text-dark mb-1">7. ล้อยาง</h6>
+              <span class="badge bg-dark-subtle text-dark rounded-pill">Rubber Wheel</span>
+            </div>
+          </div>
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="hardware-card">
+              <div class="hardware-img-box">
+                <img src="Battery.jpg" alt="Battery" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                <i class="bi bi-battery-charging text-success display-4" style="display:none;"></i>
+              </div>
+              <h6 class="fw-bold font-heading text-dark mb-1">8. รางถ่าน</h6>
+              <span class="badge bg-success-subtle text-success rounded-pill">Battery Holder</span>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="hardware-card d-flex align-items-center justify-content-center gap-3 py-3">
+              <i class="bi bi-plug-fill text-secondary fs-2"></i>
+              <div class="text-start">
+                <h6 class="fw-bold font-heading text-dark mb-0">9. สายไฟเชื่อมต่อ (Grove 4 Pin Buckled to Female Cable)</h6>
+                <small class="text-muted">เชื่อมต่อระหว่างพอร์ตบน REKA:BIT กับเซนเซอร์ต่าง ๆ อย่างสะดวก</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. ระดับบทเรียน Level 1-3 -->
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-5">
+            <div class="poster-showcase-card">
+              <img src="Unit_Robocart.jpg" 
+                   alt="การประกอบหุ่นยนต์ตามบทเรียน" 
+                   onerror="if(this.src.indexOf('ใบงาน (1).jpg')===-1){this.src='ใบงาน (1).jpg';}else{this.onerror=null;this.src='https://placehold.co/600x750/fef3c7/b45309?text=Unit_Robocart.jpg';}">
+              <div class="mt-2 small text-muted font-heading">
+                <i class="bi bi-layers-fill me-1"></i> การประกอบอุปกรณ์ตามระดับบทเรียน (Level 1 - 3)
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-7">
+            <h4 class="fw-bold font-heading text-dark mb-3">
+              <i class="bi bi-puzzle-fill text-warning me-2"></i>การประกอบชิ้นส่วนเซนเซอร์ตามเนื้อหาบทเรียน
+            </h4>
+            <p class="text-secondary fs-6 mb-4">
+              ผู้เรียนสามารถประกอบชิ้นส่วนเซนเซอร์เข้ากับโครงสร้างพื้นฐานได้ตามเนื้อหาในแต่ละระดับ
+            </p>
+
+            <div class="level-config-card mb-3">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="badge bg-warning text-dark font-heading px-3 py-2 rounded-pill fs-6">Level 1 • บทที่ 2</span>
+                <h5 class="fw-bold font-heading mb-0 text-dark">ควบคุมหุ่นยนต์เคลื่อนที่</h5>
+              </div>
+              <p class="mb-0 text-dark fs-6">ใช้<strong>โครงสร้างพื้นฐาน</strong> (micro:bit, REKA:BIT, มอเตอร์ DC, ล้อยาง, รางถ่าน) ในการขับเคลื่อนพื้นฐาน</p>
+            </div>
+
+            <div class="level-config-card mb-3" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-color: #86efac;">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="badge bg-success text-white font-heading px-3 py-2 rounded-pill fs-6">Level 2 • บทที่ 3</span>
+                <h5 class="fw-bold font-heading mb-0 text-dark">ควบคุมหุ่นยนต์วิ่งตามเส้น</h5>
+              </div>
+              <p class="mb-0 text-dark fs-6">ติดตั้ง<strong>แผงวงจรเซนเซอร์ตรวจจับเส้น (Maker Line)</strong> เพิ่มเติมด้านหน้า</p>
+            </div>
+
+            <div class="level-config-card" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-color: #93c5fd;">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="badge bg-primary text-white font-heading px-3 py-2 rounded-pill fs-6">Level 3 • บทที่ 4</span>
+                <h5 class="fw-bold font-heading mb-0 text-dark">ควบคุมหุ่นยนต์หลบหลีกวัตถุ</h5>
+              </div>
+              <p class="mb-0 text-dark fs-6">ติดตั้ง<strong>มอเตอร์เซอร์โว (Servo)</strong> และ<strong>เซนเซอร์อัลตราโซนิก (Ultrasonic)</strong> เพิ่มเติมเพื่อตรวจจับสิ่งกีดขวาง</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('lessonContent').innerHTML = html;
+  }
+
+  function getEmbedYoutubeUrl(url) {
+    if (!url) return '';
+    url = url.trim();
+    let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    let match = url.match(regExp);
+    return (match && match[2].length === 11) ? 'https://www.youtube.com/embed/' + match[2] : url;
+  }
+
+  function formatFeedbackCard(feedbackText, index, total) {
+    let lines = feedbackText.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+    if (lines.length >= 3) {
+      return `
+        <div class="hint-card">
+          <div class="hint-line-location">
+            ${total > 1 ? `<span class="badge bg-warning text-dark me-1">จุดที่ ${index + 1}</span>` : ''}
+            ${lines[0]}
+          </div>
+          <div class="hint-line-finding">${lines[1]}</div>
+          <div class="hint-line-tip">${lines[2]}</div>
+        </div>
+      `;
+    }
+    return `<div class="hint-card"><div class="hint-raw-text">${feedbackText}</div></div>`;
+  }
+
+  function handleInlineCheck(event, chapterId) {
+    event.preventDefault();
+    let urlInput = document.getElementById(`inlineCheckUrl_${chapterId}`);
+    let btn = document.getElementById(`btnInlineCheck_${chapterId}`);
+    let resDiv = document.getElementById(`inlineCheckResult_${chapterId}`);
+
+    btn.disabled = true;
+    resDiv.innerHTML = `<div class="p-3 text-center text-white bg-dark rounded-4 border border-secondary mt-3"><div class="spinner-border spinner-border-sm text-warning me-2"></div> กำลังตรวจดูบล็อกโค้ดให้... รอสักครู่นะครับ</div>`;
+
+    fetch(GAS_API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "checkCode", chapterId: chapterId, shareUrl: urlInput.value })
+    })
+    .then(res => res.json())
+    .then(res => {
+      btn.disabled = false;
+      if(!res.success) {
+        resDiv.innerHTML = `<div class="alert alert-danger rounded-4 mb-0 mt-3 border-0 shadow-sm fs-6"><i class="bi bi-exclamation-octagon-fill me-2"></i>${res.message}</div>`;
+      } else if(res.passed) {
+        resDiv.innerHTML = `
+          <div class="alert alert-success rounded-4 mb-0 mt-3 border-0 shadow-sm p-3">
+            <h5 class="fw-bold font-heading mb-1 text-success"><i class="bi bi-patch-check-fill me-1"></i> ตรวจสอบผ่านเรียบร้อย!</h5>
+            <p class="mb-0 fs-6 text-dark">${res.message}</p>
+          </div>`;
+      } else {
+        let cardsHtml = res.feedback.map((f, idx) => formatFeedbackCard(f, idx, res.feedback.length)).join('');
+        resDiv.innerHTML = `
+          <div class="feedback-box-wrapper">
+            <h6 class="fw-bold font-heading mb-3 text-dark fs-5 d-flex align-items-center gap-2">
+              <i class="bi bi-exclamation-triangle-fill text-warning fs-4"></i> 
+              <span>จุดที่ต้องลองกลับไปปรับแก้ไข (${res.feedback.length} จุด):</span>
+            </h6>
+            <div>${cardsHtml}</div>
+          </div>`;
+      }
+    })
+    .catch(err => {
+      btn.disabled = false;
+      resDiv.innerHTML = `<div class="alert alert-danger rounded-4 mb-0 mt-3 border-0 shadow-sm">เกิดข้อผิดพลาดในการเชื่อมต่อ: ${err.message}</div>`;
+    });
+  }
+
+  function openTeacherModal() {
+    document.getElementById('teacherPassInput').value = '';
+    document.getElementById('teacherAuthAlert').innerHTML = '';
+    teacherModalObj.show();
+  }
+
+  function verifyTeacherPassword() {
+    let pass = document.getElementById('teacherPassInput').value;
+    if (pass === '1234') {
+      isTeacherLoggedIn = true;
+      document.getElementById('teacherBadgeBar').style.display = 'block';
+      document.getElementById('btnTeacherLogin').style.display = 'none';
+      teacherModalObj.hide();
+      if (currentLessonId === 'home') loadHomePage();
+      else loadLesson(currentLessonId);
+    } else {
+      document.getElementById('teacherAuthAlert').innerHTML = `<div class="alert alert-danger py-2 small rounded-3 mb-3">รหัสผ่านไม่ถูกต้อง!</div>`;
+    }
+  }
+
+  function logoutTeacher() {
+    isTeacherLoggedIn = false;
+    document.getElementById('teacherBadgeBar').style.display = 'none';
+    document.getElementById('btnTeacherLogin').style.display = 'inline-flex';
+    if (currentLessonId === 'home') loadHomePage();
+    else loadLesson(currentLessonId);
+  }
+
+  // 🌟 ฟังก์ชันแสดงผลหน้าเนื้อหาบทเรียน (ย้ายกล่องแจ้งเตือน Extension มาไว้ก่อนวิดีโอทบทวนเนื้อหา)
+  function loadLesson(id, btnElem) {
+    currentLessonId = id;
+    document.querySelectorAll('#lessonTabs .nav-link').forEach(b => b.classList.remove('active'));
+    if(btnElem) {
+      btnElem.classList.add('active');
+    } else {
+      let targetBtn = document.getElementById(`tabBtn_${id}`);
+      if (targetBtn) targetBtn.classList.add('active');
+    }
+
+    let l = lessonsData.find(item => item.id === id);
+    if (!l) return;
+
+    let chapNum = parseInt(l.id, 10);
+
+    let scenarioVidHtml = '';
+    if (l.scenarioVideo) {
+      let embedScenario = getEmbedYoutubeUrl(l.scenarioVideo);
+      if (embedScenario) {
+        scenarioVidHtml = `
+          <div class="scenario-card-modern mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <span class="scenario-badge">
+                <i class="bi bi-film"></i> การ์ตูนสถานการณ์จำลอง (บทที่ ${l.id})
+              </span>
+              <span class="scenario-subtext">
+                <i class="bi bi-lightbulb-fill me-1"></i>ชวนคิดก่อนเริ่มลงมือปฏิบัติ!
+              </span>
+            </div>
+            <div class="video-container shadow">
+              <iframe src="${embedScenario}" allowfullscreen></iframe>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    let reviewVidsHtml = '';
+    let reviewUrl = (l.videos && l.videos.length > 0) ? l.videos[0] : '';
+    let embedReview = getEmbedYoutubeUrl(reviewUrl);
+
+    reviewVidsHtml = `
+      <div class="review-card-modern mb-4">
+        <h5 class="fw-bold font-heading mb-3 d-flex align-items-center gap-2 text-dark">
+          <i class="bi bi-play-btn-fill text-danger fs-4"></i> วิดีโอทบทวนเนื้อหาประกอบการเรียนรู้
+        </h5>
+        ${embedReview ? 
+          `<div class="video-container mb-0"><iframe src="${embedReview}" allowfullscreen></iframe></div>` : 
+          '<div class="p-3 bg-white rounded-3 text-center text-muted border">ยังไม่มีคลิปวิดีโอทบทวนเนื้อหาสำหรับบทเรียนนี้</div>'
+        }
+      </div>
+    `;
+
+    let missionVidHtml = '';
+    let missionUrl = l.missionVideo || (l.videos && l.videos[1] ? l.videos[1] : '');
+    let rawTasks = (l.missionTasks && l.missionTasks.length > 0) ? [...l.missionTasks] : [...(DEFAULT_MISSION_TASKS[chapNum] || [])];
+
+    if ((chapNum === 3 || chapNum === 4) && rawTasks.length < 2 && DEFAULT_MISSION_TASKS[chapNum]) {
+      DEFAULT_MISSION_TASKS[chapNum].forEach(defTask => {
+        let exists = rawTasks.some(rt => rt.type === defTask.type || (rt.tag && rt.tag === defTask.tag));
+        if (!exists) rawTasks.push(defTask);
+      });
+    }
+
+    if (chapNum === 3 || chapNum === 4) {
+      rawTasks.sort((a, b) => {
+        let aIsWorksheet = (a.type === 'worksheet' || (a.tag && a.tag.includes('ใบงาน'))) ? 0 : 1;
+        let bIsWorksheet = (b.type === 'worksheet' || (b.tag && b.tag.includes('ใบงาน'))) ? 0 : 1;
+        return aIsWorksheet - bIsWorksheet;
+      });
+    }
+
+    let tasksListHtml = '';
+    if (rawTasks.length > 0) {
+      let taskCards = rawTasks.map(t => {
+        let isCode = t.type === 'practice' || (t.tag && t.tag.includes('ปฏิบัติ'));
+        return `
+          <div class="task-item ${isCode ? 'coding' : ''}">
+            <span class="task-badge-tag ${isCode ? 'bg-warning text-dark' : 'bg-primary text-white'}">
+              <i class="bi ${isCode ? 'bi-cpu-fill' : 'bi-file-earmark-text-fill'} me-1"></i>${t.tag}
+            </span>
+            <div class="fw-medium text-dark fs-6">${t.text}</div>
+          </div>
+        `;
+      }).join('');
+
+      tasksListHtml = `
+        <div class="mission-detail-box">
+          <h6 class="fw-bold font-heading text-primary mb-3 d-flex align-items-center gap-2">
+            <i class="bi bi-check2-square fs-5 text-primary"></i> ภารกิจที่ต้องพิชิตในบทเรียนนี้ (${rawTasks.length} ภารกิจ):
+          </h6>
+          <div>${taskCards}</div>
+        </div>
+      `;
+    }
+
+    if (missionUrl || rawTasks.length > 0) {
+      let embedMission = getEmbedYoutubeUrl(missionUrl);
+      missionVidHtml = `
+        <div class="mission-card-modern mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <span class="mission-badge">
+              <i class="bi bi-flag-fill"></i> การ์ตูนมอบหมายภารกิจ (บทที่ ${l.id})
+            </span>
+            <span class="mission-subtext">
+              <i class="bi bi-trophy-fill me-1"></i>พร้อมลุยภารกิจท้าทายประจำบทเรียน!
+            </span>
+          </div>
+          ${embedMission ? `<div class="video-container shadow"><iframe src="${embedMission}" allowfullscreen></iframe></div>` : ''}
+          ${tasksListHtml}
+        </div>
+      `;
+    }
+
+    // 🌟 กล่องเตือน Extension ดีไซน์สวยงาม (แสดงเฉพาะบทที่ 2, 3, 4) วางไว้ก่อนวิดีโอทบทวนเนื้อหา
+    let extensionAlertHtml = '';
+    if (chapNum !== 1) {
+      extensionAlertHtml = `
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-left: 6px solid #f59e0b !important;">
+          <div class="d-flex align-items-start gap-3">
+            <div class="bg-warning text-dark rounded-circle p-2 d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+              <i class="bi bi-puzzle-fill fs-4"></i>
+            </div>
+            <div>
+              <h5 class="fw-bold font-heading text-dark mb-2">
+                คำแนะนำสำคัญก่อนเริ่มเขียนโปรแกรมใน Microsoft MakeCode
+              </h5>
+              <p class="mb-2 text-secondary fs-6 leading-relaxed">
+                ก่อนเริ่มต้นลงมือเขียนโปรแกรมคำสั่งควบคุมหุ่นยนต์ ROBOCART นักเรียนจะต้องทำการ<strong>เพิ่มส่วนขยาย (Extensions)</strong> ของหุ่นยนต์เข้าสู่โปรแกรม MakeCode ก่อนโดยไปที่เมนู <em>Extensions (ส่วนขยาย)</em> แล้วทำการค้นหาด้วยคีย์เวิร์ด
+              </p>
+              <div class="bg-white border border-warning rounded-3 p-2 px-3 font-monospace text-primary fw-bold fs-5 shadow-sm d-inline-block mb-2">
+                <i class="bi bi-github me-1"></i> amslthy/ro-robocart
+              </div>
+              <div class="small text-muted">
+                หรือคัดลอกลิงก์ Repository นี้ไปวางในช่องค้นหา: <a href="https://github.com/amslthy/ro-robocart" target="_blank" class="fw-bold text-decoration-underline text-dark">https://github.com/amslthy/ro-robocart</a> เพื่อเรียกใช้งานบล็อกคำสั่ง ROBOCART ทั้งหมดได้อย่างถูกต้อง
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    let teacherHtml = '';
+    if (isTeacherLoggedIn) {
+      let isChap1 = (chapNum === 1);
+      let colClass = isChap1 ? "col-md-4" : "col-md-6 col-lg-3";
+
+      let makeCodeAndSolutionHtml = '';
+      if (!isChap1) {
+        makeCodeAndSolutionHtml = `
+          <div class="${colClass}">
+            <div class="p-3 bg-white rounded-3 border h-100 d-flex flex-column justify-content-between">
+              <div>
+                <h6 class="fw-bold text-dark font-heading mb-1"><i class="bi bi-code-slash text-primary me-2"></i> MakeCode Project</h6>
+                <p class="text-muted small mb-3">ลิงก์โปรเจกต์โค้ดเฉลยต้นแบบ</p>
+              </div>
+              ${l.solutionCodeUrl ? `<a href="${l.solutionCodeUrl}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill font-heading w-100"><i class="bi bi-box-arrow-up-right me-1"></i> เปิด MakeCode</a>` : '<span class="badge bg-light text-muted w-100 py-2">ยังไม่มีลิงก์</span>'}
+            </div>
+          </div>
+
+          <div class="col-12 mt-3">
+            <div class="p-3 bg-white rounded-3 border">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="fw-bold text-dark font-heading mb-0"><i class="bi bi-image text-info me-2"></i>รูปภาพเฉลย Block Code ที่ถูกต้อง</h6>
+                ${l.solutionImgUrl ? `<a href="${l.solutionImgUrl}" target="_blank" class="btn btn-sm btn-link text-decoration-none small"><i class="bi bi-arrows-angle-expand me-1"></i> ดูภาพขนาดเต็ม</a>` : ''}
+              </div>
+              
+              <div class="text-center p-2 bg-light rounded-3 border mt-2">
+                ${l.solutionImgUrl ? 
+                  `<img src="${l.solutionImgUrl}" style="max-height: 480px; width: 100%; object-fit: contain;" alt="รูปเฉลย Block Code" onerror="this.onerror=null; this.src='https://placehold.co/800x400?text=Solution+Image+Not+Found';">` : 
+                  '<div class="py-4 text-muted small"><i class="bi bi-image fs-1 d-block mb-2 text-black-50"></i>ยังไม่ได้อัปโหลดรูปภาพ Block Code เฉลยสำหรับบทเรียนนี้</div>'
+                }
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      teacherHtml = `
+        <div class="teacher-section p-4 my-4">
+          <div class="d-flex align-items-center gap-2 text-success mb-3 pb-2 border-bottom border-success-subtle">
+            <i class="bi bi-person-badge-fill fs-4"></i>
+            <h5 class="fw-bold mb-0 font-heading">สื่อและเอกสารสำหรับผู้สอน (โหมดคุณครู)</h5>
+          </div>
+          
+          <div class="row g-3">
+            <div class="${colClass}">
+              <div class="p-3 bg-white rounded-3 border h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <h6 class="fw-bold text-dark font-heading mb-1"><i class="bi bi-file-earmark-pdf-fill text-danger me-2"></i>คู่มือคำชี้แจงผู้สอน</h6>
+                  <p class="text-muted small mb-3">แนวทางการสอนและแผนกิจกรรม</p>
+                </div>
+                ${l.teacherPdfUrl ? `<a href="${l.teacherPdfUrl}" target="_blank" class="btn btn-danger btn-sm rounded-pill font-heading w-100"><i class="bi bi-download me-1"></i> ดาวน์โหลด PDF</a>` : '<span class="badge bg-light text-muted w-100 py-2">ยังไม่มีไฟล์คู่มือ</span>'}
+              </div>
+            </div>
+
+            <div class="${colClass}">
+              <div class="p-3 bg-white rounded-3 border h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <h6 class="fw-bold text-dark font-heading mb-1"><i class="bi bi-file-earmark-check-fill text-success me-2"></i>เฉลยใบกิจกรรม</h6>
+                  <p class="text-muted small mb-3">คำตอบเฉลยประจำบทเรียน</p>
+                </div>
+                ${l.answerSheetUrl ? `<a href="${l.answerSheetUrl}" target="_blank" class="btn btn-success btn-sm rounded-pill font-heading w-100"><i class="bi bi-file-earmark-text me-1"></i> ดูเฉลยใบงาน</a>` : '<span class="badge bg-light text-muted w-100 py-2">ยังไม่มีไฟล์เฉลย</span>'}
+              </div>
+            </div>
+
+            <div class="${colClass}">
+              <div class="p-3 bg-white rounded-3 border h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <h6 class="fw-bold text-dark font-heading mb-1"><i class="bi bi-clipboard2-data-fill text-warning me-2"></i>เกณฑ์คะแนนประเมิน</h6>
+                  <p class="text-muted small mb-3">ตารางเกณฑ์การให้คะแนน (Rubric)</p>
+                </div>
+                ${l.rubricUrl ? `<a href="${l.rubricUrl}" target="_blank" class="btn btn-warning text-dark btn-sm rounded-pill font-heading fw-semibold w-100"><i class="bi bi-download me-1"></i> ดาวน์โหลดเกณฑ์</a>` : '<span class="badge bg-light text-muted w-100 py-2">ยังไม่มีไฟล์เกณฑ์ประเมิน</span>'}
+              </div>
+            </div>
+
+            ${makeCodeAndSolutionHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    let codeCheckerHtml = '';
+    if (chapNum !== 1) {
+      codeCheckerHtml = `
+        <div class="checker-hero-card mt-5">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge-check">
+              <i class="bi bi-check-circle-fill me-1"></i> Check
+            </span>
+            <h4 class="fw-bold font-heading mb-0 text-white">ระบบตรวจสอบ Block Code อัตโนมัติ สำหรับภารกิจ</h4>
+          </div>
+          <p class="text-white opacity-90 fs-6 mb-4">
+            คัดลอก Share Link จาก Microsoft MakeCode มาวางในช่องด้านล่าง เพื่อตรวจทานความถูกต้องของโค้ดก่อนทำการแฟลชลงหุ่นยนต์ ROBOCART
+          </p>
+          
+          <form onsubmit="handleInlineCheck(event, ${l.id})">
+            <div class="row g-2">
+              <div class="col-md-9">
+                <div class="input-group shadow-sm">
+                  <span class="input-group-text bg-white border-0 text-dark fs-5 px-3"><i class="bi bi-link-45deg"></i></span>
+                  <input type="url" class="form-control border-0 py-3 fs-6" id="inlineCheckUrl_${l.id}" placeholder="วางลิงก์ MakeCode ที่นี่ (เช่น https://makecode.microbit.org/S00000-...)" required>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <button type="submit" class="btn btn-checker-submit w-100 h-100 d-flex align-items-center justify-content-center gap-2 fs-6" id="btnInlineCheck_${l.id}">
+                  <i class="bi bi-cpu-fill fs-5"></i> ตรวจสอบโค้ด
+                </button>
+              </div>
+            </div>
+          </form>
+          <div id="inlineCheckResult_${l.id}"></div>
+        </div>
+      `;
+    }
+
+    let html = `
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+        <div>
+          <span class="badge bg-primary-subtle text-primary mb-2 font-heading px-3 py-1 rounded-pill">บทเรียนที่ ${l.id}</span>
+          <h2 class="fw-bold text-dark font-heading mb-0 fs-2">${l.title}</h2>
+        </div>
+        ${l.worksheetUrl ? `<a href="${l.worksheetUrl}" target="_blank" class="btn btn-success rounded-pill font-heading px-4 py-2 fw-medium shadow-sm"><i class="bi bi-file-earmark-arrow-down-fill me-1"></i> ดาวน์โหลดใบงานนักเรียน</a>` : ''}
+      </div>
+      <p class="text-secondary fs-5 mb-4 leading-relaxed">${l.desc || ''}</p>
+
+      ${teacherHtml}
+      ${scenarioVidHtml}
+      ${extensionAlertHtml}
+      ${reviewVidsHtml}
+      ${missionVidHtml}
+      ${codeCheckerHtml}
+    `;
+
+    document.getElementById('lessonContent').innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
