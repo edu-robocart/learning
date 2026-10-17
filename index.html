@@ -439,6 +439,48 @@
       border: 2px dashed #10b981;
       border-radius: var(--card-radius);
     }
+    
+    /* ปุ่มแบนเนอร์ลิงก์ MakeCode */
+    .btn-makecode-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, #00b4d8 0%, #0077b6 100%);
+      color: #ffffff !important;
+      text-decoration: none !important;
+      border-radius: 18px;
+      padding: 18px 24px;
+      box-shadow: 0 8px 20px rgba(0, 119, 182, 0.25);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-makecode-banner:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 26px rgba(0, 119, 182, 0.35);
+      background: linear-gradient(135deg, #48cae4 0%, #0284c7 100%);
+    }
+
+    .btn-makecode-banner .btn-action-pill {
+      background: #ffffff;
+      color: #0077b6;
+      font-family: 'Prompt', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 10px 20px;
+      border-radius: 50px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-makecode-banner:hover .btn-action-pill {
+      transform: scale(1.05);
+      background-color: #ffb703;
+      color: #000;
+    }
   </style>
 </head>
 <body>
@@ -1316,6 +1358,27 @@
       `;
     }
 
+    // 🌟 ปุ่มลิงก์เข้าสู่ Microsoft MakeCode
+    let makeCodeBtnHtml = `
+      <div class="mb-4">
+        <a href="https://makecode.microbit.org/" target="_blank" rel="noopener noreferrer" class="btn-makecode-banner">
+          <div class="d-flex align-items-center gap-3">
+            <div class="bg-white bg-opacity-25 rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+              <i class="bi bi-code-square fs-2 text-white"></i>
+            </div>
+            <div>
+              <h5 class="fw-bold font-heading mb-1 text-white">เปิดโปรแกรม Microsoft MakeCode for micro:bit</h5>
+              <p class="mb-0 text-white-50 small">คลิกเพื่อเปิดหน้าต่างเขียนโปรแกรมและเริ่มทดสอบบล็อกคำสั่งหุ่นยนต์</p>
+            </div>
+          </div>
+          <div class="btn-action-pill flex-shrink-0 ms-3">
+            <span>เข้าสู่ MakeCode</span>
+            <i class="bi bi-box-arrow-up-right"></i>
+          </div>
+        </a>
+      </div>
+    `;
+
     let html = `
       <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
         <div>
@@ -1329,6 +1392,7 @@
       ${teacherHtml}
       ${scenarioVidHtml}
       ${extensionAlertHtml}
+      ${makeCodeBtnHtml}          <!-- 👈 ปุ่มจะอยู่ใต้คำแนะนำ และอยู่เหนือวิดีโอทบทวน -->
       ${reviewVidsHtml}
       ${missionVidHtml}
       ${codeCheckerHtml}
