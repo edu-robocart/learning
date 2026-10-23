@@ -719,17 +719,32 @@
         <h6 class="fw-bold mb-3 text-dark font-heading d-flex align-items-center gap-2">
           <i class="bi bi-journal-bookmark"></i> สารบัญการเรียนรู้
         </h6>
-        <div class="nav flex-column lesson-nav" id="lessonTabs" role="tablist"></div>
+        <div class="nav flex-column lesson-nav" id="lessonTabs" role="tablist">
+          <button class="nav-link home-tab active" id="tabBtn_home" onclick="loadHomePage(this)">
+            <span><i class="bi bi-house-heart-fill me-2"></i>หน้าหลัก</span>
+            <i class="bi bi-chevron-right small opacity-75"></i>
+          </button>
+          <hr class="my-2 opacity-25">
+          <button class="nav-link" id="tabBtn_1" onclick="triggerLessonTab(1)">
+            <span>บทที่ 1</span><i class="bi bi-chevron-right small opacity-50"></i>
+          </button>
+          <button class="nav-link" id="tabBtn_2" onclick="triggerLessonTab(2)">
+            <span>บทที่ 2</span><i class="bi bi-chevron-right small opacity-50"></i>
+          </button>
+          <button class="nav-link" id="tabBtn_3" onclick="triggerLessonTab(3)">
+            <span>บทที่ 3</span><i class="bi bi-chevron-right small opacity-50"></i>
+          </button>
+          <button class="nav-link" id="tabBtn_4" onclick="triggerLessonTab(4)">
+            <span>บทที่ 4</span><i class="bi bi-chevron-right small opacity-50"></i>
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- ฝั่งขวา: เนื้อหาหลัก -->
     <div class="col-lg-10 col-md-9">
       <div class="content-card-large" id="lessonContent">
-        <div class="text-center my-5 py-5">
-          <div class="spinner-border text-info" role="status"></div>
-          <p class="text-muted mt-3 fw-medium font-heading">กำลังโหลดเนื้อหา...</p>
-        </div>
+        <!-- แสดงผลหน้าแรกทันทีเพื่อป้องกันอาการค้าง -->
       </div>
     </div>
   </div>
@@ -746,7 +761,6 @@
       <div class="modal-body p-4 text-center">
         <i class="bi bi-shield-lock text-primary display-4 mb-3 d-block"></i>
         <p class="text-muted small mb-1">กรอกรหัสผ่านผู้สอนเพื่อดูสื่อคู่มือ เกณฑ์คะแนนประเมิน และเฉลยกิจกรรม</p>
-        <!-- ข้อความแจ้งรหัสผ่านสำหรับทดลองใช้ -->
         <p class="fw-bold fs-6 mb-3" style="color: #ff751f;">รหัสผ่านสำหรับทดลองใช้ : 1234</p>
         
         <input type="password" class="form-control text-center fs-5 mb-3" id="teacherPassInput" placeholder="กรอกรหัสผ่าน">
@@ -799,8 +813,14 @@
     .then(res => res.json())
     .then(data => renderLessons(data))
     .catch(err => {
-      console.error("Error loading data:", err);
-      renderLessons([]);
+      console.error("Error loading data from Google Apps Script:", err);
+      // ในกรณีที่ดึง API ไม่สำเร็จ ให้ใช้ข้อมูลตั้งต้นเบื้องต้น
+      renderLessons([
+        { id: 1, title: "แนะนำหุ่นยนต์และโปรแกรม MakeCode", desc: "เรียนรู้ส่วนประกอบพื้นฐาน" },
+        { id: 2, title: "เขียนโปรแกรมควบคุมหุ่นยนต์เคลื่อนที่", desc: "Level 1" },
+        { id: 3, title: "เขียนโปรแกรมหุ่นยนต์วิ่งตามเส้น", desc: "Level 2" },
+        { id: 4, title: "เขียนโปรแกรมหุ่นยนต์หลบหลีกวัตถุ", desc: "Level 3" }
+      ]);
     });
   }
 
@@ -815,7 +835,7 @@
     `;
     data.forEach((l) => {
       tabs += `
-        <button class="nav-link ${currentLessonId === l.id ? 'active' : ''}" id="tabBtn_${l.id}" onclick="loadLesson(${l.id}, this)">
+        <button class="nav-link ${currentLessonId == l.id ? 'active' : ''}" id="tabBtn_${l.id}" onclick="loadLesson(${l.id}, this)">
           <span>บทที่ ${l.id}</span>
           <i class="bi bi-chevron-right small opacity-50"></i>
         </button>`;
@@ -916,7 +936,7 @@
 
       <hr class="my-5 opacity-25">
 
-      <!-- 3. ขั้นตอนการจัดการเรียนรู้ 5 ขั้นตอน (แบบกดดูเพิ่มเติม / Accordion) -->
+      <!-- 3. ขั้นตอนการจัดการเรียนรู้ 5 ขั้นตอน -->
       <div class="mb-5">
         <div class="d-flex align-items-center gap-2 mb-4">
           <i class="bi bi-diagram-3-fill text-warning fs-3"></i>
@@ -925,7 +945,6 @@
         </div>
 
         <div class="row g-4 align-items-start">
-          <!-- คอลัมน์ซ้าย: รูปโปสเตอร์ ID.jpg ปรับความสูงไม่ให้ล้น -->
           <div class="col-lg-5">
             <div class="poster-showcase-card">
               <img src="ID.jpg" 
@@ -938,9 +957,7 @@
             </div>
           </div>
 
-          <!-- คอลัมน์ขวา: 5 หัวข้อหลัก พร้อมปุ่มกดดูเพิ่มเติม -->
           <div class="col-lg-7">
-            
             <!-- ขั้นที่ 1 -->
             <div>
               <button class="accordion-step-btn" type="button" data-bs-toggle="collapse" data-bs-target="#step1Collapse" aria-expanded="true">
@@ -1209,7 +1226,7 @@
           </div>
         </div>
 
-        <!-- 6. 🌐 ROBOCART 3D Interactive Model (ส่วนที่เพิ่มลงล่างสุดต่อจากรูปภาพ) -->
+        <!-- 6. 🌐 ROBOCART 3D Interactive Model (แสดงผลล่างสุดต่อจากรูปภาพ) -->
         <hr class="my-5 opacity-25">
         
         <div class="mt-4">
@@ -1394,4 +1411,1024 @@
   function getEmbedYoutubeUrl(url) {
     if (!url) return '';
     url = url.trim();
-    let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).
+    let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    let match = url.match(regExp);
+    return (match && match[2].length === 11) ? 'https://www.youtube.com/embed/' + match[2] : url;
+  }
+
+  function formatFeedbackCard(feedbackText, index, total) {
+    let lines = feedbackText.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+    if (lines.length >= 3) {
+      return `
+        <div class="hint-card">
+          <div class="hint-line-location">
+            ${total > 1 ? `<span class="badge bg-warning text-dark me-1">จุดที่ ${index + 1}</span>` : ''}
+            ${lines[0]}
+          </div>
+          <div class="hint-line-finding">${lines[1]}</div>
+          <div class="hint-line-tip">${lines[2]}</div>
+        </div>
+      `;
+    }
+    return `<div class="hint-card"><div class="hint-raw-text">${feedbackText}</div></div>`;
+  }
+
+  function handleInlineCheck(event, chapterId) {
+    event.preventDefault();
+    let urlInput = document.getElementById(`inlineCheckUrl_${chapterId}`);
+    let btn = document.getElementById(`btnInlineCheck_${chapterId}`);
+    let resDiv = document.getElementById(`inlineCheckResult_${chapterId}`);
+
+    btn.disabled = true;
+    resDiv.innerHTML = `<div class="p-3 text-center text-white bg-dark rounded-4 border border-secondary mt-3"><div class="spinner-border spinner-border-sm text-warning me-2"></div> กำลังตรวจดูบล็อกโค้ดให้... รอสักครู่นะครับ</div>`;
+
+    fetch(GAS_API_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "checkCode", chapterId: chapterId, shareUrl: urlInput.value })
+    })
+    .then(res => res.json())
+    .then(res => {
+      btn.disabled = false;
+      if(!res.success) {
+        resDiv.innerHTML = `<div class="alert alert-danger rounded-4 mb-0 mt-3 border-0 shadow-sm fs-6"><i class="bi bi-exclamation-octagon-fill me-2"></i>${res.message}</div>`;
+      } else if(res.passed) {
+        resDiv.innerHTML = `
+          <div class="alert alert-success rounded-4 mb-0 mt-3 border-0 shadow-sm p-3">
+            <h5 class="fw-bold font-heading mb-1 text-success"><i class="bi bi-patch-check-fill me-1"></i> ตรวจสอบผ่านเรียบร้อย!</h5>
+            <p class="mb-0 fs-6 text-dark">${res.message}</p>
+          </div>`;
+      } else {
+        let cardsHtml = res.feedback.map((f, idx) => formatFeedbackCard(f, idx, res.feedback.length)).join('');
+        resDiv.innerHTML = `
+          <div class="feedback-box-wrapper">
+            <h6 class="fw-bold font-heading mb-3 text-dark fs-5 d-flex align-items-center gap-2">
+              <i class="bi bi-exclamation-triangle-fill text-warning fs-4"></i> 
+              <span>จุดที่ต้องลองกลับไปปรับแก้ไข (${res.feedback.length} จุด):</span>
+            </h6>
+            <div>${cardsHtml}</div>
+          </div>`;
+      }
+    })
+    .catch(err => {
+      btn.disabled = false;
+      resDiv.innerHTML = `<div class="alert alert-danger rounded-4 mb-0 mt-3 border-0 shadow-sm">เกิดข้อผิดพลาดในการเชื่อมต่อ: ${err.message}</div>`;
+    });
+  }
+
+  function openTeacherModal() {
+    document.getElementById('teacherPassInput').value = '';
+    document.getElementById('teacherAuthAlert').innerHTML = '';
+    teacherModalObj.show();
+  }
+
+  function verifyTeacherPassword() {
+    let pass = document.getElementById('teacherPassInput').value;
+    if (pass === '1234') {
+      isTeacherLoggedIn = true;
+      document.getElementById('teacherBadgeBar').style.display = 'block';
+      document.getElementById('btnTeacherLogin').style.display = 'none';
+      teacherModalObj.hide();
+      if (currentLessonId === 'home') loadHomePage();
+      else loadLesson(currentLessonId);
+    } else {
+      document.getElementById('teacherAuthAlert').innerHTML = `<div class="alert alert-danger py-2 small rounded-3 mb-3">รหัสผ่านไม่ถูกต้อง!</div>`;
+    }
+  }
+
+  function logoutTeacher() {
+    isTeacherLoggedIn = false;
+    document.getElementById('teacherBadgeBar').style.display = 'none';
+    document.getElementById('btnTeacherLogin').style.display = 'inline-flex';
+    if (currentLessonId === 'home') loadHomePage();
+    else loadLesson(currentLessonId);
+  }
+
+  // 🌟 ฟังก์ชันแสดงผลหน้าเนื้อหาบทเรียน
+  function loadLesson(id, btnElem) {
+    if (threeAnimationId) {
+      cancelAnimationFrame(threeAnimationId);
+      threeAnimationId = null;
+    }
+
+    currentLessonId = id;
+    document.querySelectorAll('#lessonTabs .nav-link').forEach(b => b.classList.remove('active'));
+    if(btnElem) {
+      btnElem.classList.add('active');
+    } else {
+      let targetBtn = document.getElementById(`tabBtn_${id}`);
+      if (targetBtn) targetBtn.classList.add('active');
+    }
+
+    let l = lessonsData.find(item => item.id == id);
+    if (!l) {
+      document.getElementById('lessonContent').innerHTML = `
+        <div class="text-center my-5 py-5">
+          <i class="bi bi-exclamation-circle text-warning display-3 mb-3 d-block"></i>
+          <h4 class="fw-bold font-heading text-dark">ไม่พบข้อมูลบทเรียนที่เลือก</h4>
+          <p class="text-muted">โปรดตรวจสอบการเชื่อมต่อกับ Google Apps Script API หรือเลือกบทเรียนอื่น</p>
+        </div>
+      `;
+      return;
+    }
+
+    let chapNum = parseInt(l.id, 10);
+
+    let scenarioVidHtml = '';
+    if (l.scenarioVideo) {
+      let embedScenario = getEmbedYoutubeUrl(l.scenarioVideo);
+      if (embedScenario) {
+        scenarioVidHtml = `
+          <div class="scenario-card-modern mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <span class="scenario-badge">
+                <i class="bi bi-film"></i> การ์ตูนสถานการณ์จำลอง (บทที่ ${l.id})
+              </span>
+              <span class="scenario-subtext">
+                <i class="bi bi-lightbulb-fill me-1"></i>ชวนคิดก่อนเริ่มลงมือปฏิบัติ!
+              </span>
+            </div>
+            <div class="video-container shadow">
+              <iframe src="${embedScenario}" allowfullscreen></iframe>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    let reviewVidsHtml = '';
+    let reviewUrl = (l.videos && l.videos.length > 0) ? l.videos[0] : '';
+    let embedReview = getEmbedYoutubeUrl(reviewUrl);
+
+    reviewVidsHtml = `
+      <div class="review-card-modern mb-4">
+        <h5 class="fw-bold font-heading mb-3 d-flex align-items-center gap-2 text-dark">
+          <i class="bi bi-play-btn-fill text-danger fs-4"></i> วิดีโอทบทวนเนื้อหาประกอบการเรียนรู้
+        </h5>
+        ${embedReview ? 
+          `<div class="video-container mb-0"><iframe src="${embedReview}" allowfullscreen></iframe></div>` : 
+          '<div class="p-3 bg-white rounded-3 text-center text-muted border">ยังไม่มีคลิปวิดีโอทบทวนเนื้อหาสำหรับบทเรียนนี้</div>'
+        }
+      </div>
+    `;
+
+    let missionVidHtml = '';
+    let missionUrl = l.missionVideo || (l.videos && l.videos[1] ? l.videos[1] : '');
+    let rawTasks = (l.missionTasks && l.missionTasks.length > 0) ? [...l.missionTasks] : [...(DEFAULT_MISSION_TASKS[chapNum] || [])];
+
+    if ((chapNum === 3 || chapNum === 4) && rawTasks.length < 2 && DEFAULT_MISSION_TASKS[chapNum]) {
+      DEFAULT_MISSION_TASKS[chapNum].forEach(defTask => {
+        let exists = rawTasks.some(rt => rt.type === defTask.type || (rt.tag && rt.tag === defTask.tag));
+        if (!exists) rawTasks.push(defTask);
+      });
+    }
+
+    if (chapNum === 3 || chapNum === 4) {
+      rawTasks.sort((a, b) => {
+        let aIsWorksheet = (a.type === 'worksheet' || (a.tag && a.tag.includes('ใบงาน'))) ? 0 : 1;
+        let bIsWorksheet = (b.type === 'worksheet' || (b.tag && b.tag.includes('ใบงาน'))) ? 0 : 1;
+        return aIsWorksheet - bIsWorksheet;
+      });
+    }
+
+    let tasksListHtml = '';
+    if (rawTasks.length > 0) {
+      let taskCards = rawTasks.map(t => {
+        let isCode = t.type === 'practice' || (t.tag && t.tag.includes('ปฏิบัติ'));
+        return `
+          <div class="task-item ${isCode ? 'coding' : ''}">
+            <span class="task-badge-tag ${isCode ? 'bg-warning text-dark' : 'bg-primary text-white'}">
+              <i class="bi ${isCode ? 'bi-cpu-fill' : 'bi-file-earmark-text-fill'} me-1"></i>${t.tag}
+            </span>
+            <div class="fw-medium text-dark fs-6">${t.text}</div>
+          </div>
+        `;
+      }).join('');
+
+      tasksListHtml = `
+        <div class="mission-detail-box">
+          <h6 class="fw-bold font-heading text-primary mb-3 d-flex align-items-center gap-2">
+            <i class="bi bi-check2-square fs-5 text-primary"></i> ภารกิจที่ต้องพิชิตในบทเรียนนี้ (${rawTasks.length} ภารกิจ):
+          </h6>
+          <div>${taskCards}</div>
+        </div>
+      `;
+    }
+
+    let extensionAlertHtml = `
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-left: 6px solid #f59e0b !important;">
+        <div class="d-flex align-items-start gap-3">
+          <div class="bg-warning text-dark rounded-circle p-2 d-flex align-items-center justify-content-center shadow-sm flex-shrink-0" style="width: 48px; height: 48px;">
+            <i class="bi bi-puzzle-fill fs-4"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold font-heading text-dark mb-2">
+              คำแนะนำสำคัญก่อนเริ่มเขียนโปรแกรมใน Microsoft MakeCode
+            </h5>
+            <p class="mb-2 text-secondary fs-6 leading-relaxed">
+              ก่อนเริ่มต้นลงมือเขียนโปรแกรมคำสั่งควบคุมหุ่นยนต์ ROBOCART นักเรียนจะต้องทำการ<strong>เพิ่มส่วนขยาย (Extensions)</strong> ของหุ่นยนต์เข้าสู่โปรแกรม MakeCode ก่อนโดยไปที่เมนู <em>Extensions (ส่วนขยาย)</em> แล้วทำการค้นหาด้วยคีย์เวิร์ด
+            </p>
+            <div class="bg-white border border-warning rounded-3 p-2 px-3 font-monospace text-primary fw-bold fs-5 shadow-sm d-inline-block mb-2">
+              <i class="bi bi-github me-1"></i> amslthy/ro-robocart
+            </div>
+            <div class="small text-muted">
+              หรือคัดลอกลิงก์ Repository นี้ไปวางในช่องค้นหา: <a href="https://github.com/amslthy/ro-robocart" target="_blank" class="fw-bold text-decoration-underline text-dark">https://github.com/amslthy/ro-robocart</a> เพื่อเรียกใช้งานบล็อกคำสั่ง ROBOCART ทั้งหมดได้อย่างถูกต้อง
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    if (missionUrl || rawTasks.length > 0) {
+      let embedMission = getEmbedYoutubeUrl(missionUrl);
+      missionVidHtml = `
+        <div class="mission-card-modern mb-4">
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <span class="mission-badge">
+              <i class="bi bi-flag-fill"></i> การ์ตูนมอบหมายภารกิจ (บทที่ ${l.id})
+            </span>
+            <span class="mission-subtext">
+              <i class="bi bi-trophy-fill me-1"></i>พร้อมลุยภารกิจท้าทายประจำบทเรียน!
+            </span>
+          </div>
+          ${embedMission ? `<div class="video-container shadow"><iframe src="${embedMission}" allowfullscreen></iframe></div>` : ''}
+          ${tasksListHtml}
+        </div>
+      `;
+    }
+
+    let teacherHtml = '';
+    if (isTeacherLoggedIn) {
+      let isChap1 = (chapNum === 1);
+      let colClass = isChap1 ? "col-md-4" : "col-md-6 col-lg-3";
+
+      let makeCodeAndSolutionHtml = '';
+      if (!isChap1) {
+        makeCodeAndSolutionHtml = `
+          <div class="${colClass}">
+            <div class="p-3 bg-white rounded-3 border h-100 d-flex flex-column justify-content-between">
+              <div>
+                <h6 class="fw-bold text-dark font-heading mb-1"><i class="bi bi-code-slash text-primary me-2"></i> MakeCode Project</h6>
+                <p class="text-muted small mb-3">ลิงก์โปรเจกต์โค้ดเฉลยต้นแบบ</p>
+              </div>
+              ${l.solutionCodeUrl ? `<a href="${l.solutionCodeUrl}" target="_blank" class="btn btn-outline-primary btn-sm rounded-pill font-heading w-100"><i class="bi bi-box-arrow-up-right me-1"></i> เปิด MakeCode</a>` : '<span class="badge bg-light text-muted w-100 py-2">ยังไม่มีลิงก์</span>'}
+            </div>
+          </div>
+
+          <div class="col-12 mt-3">
+            <div class="p-3 bg-white rounded-3 border">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="fw-bold text-dark font-heading mb-0"><i class="bi bi-image text-info me-2"></i>รูปภาพเฉลย Block Code ที่ถูกต้อง</h6>
+                ${l.solutionImgUrl ? `<a href="${l.solutionImgUrl}" target="_blank" class="btn btn-sm btn-link text-decoration-none small"><i class="bi bi-arrows-angle-expand me-1"></i> ดูภาพขนาดเต็ม</a>` : ''}
+              </div>
+              
+              <div class="text-center p-2 bg-light rounded-3 border mt-2">
+                ${l.solutionImgUrl ? 
+                  `<img src="${l.solutionImgUrl}" style="max-height: 480px; width: 100%; object-fit: contain;" alt="รูปเฉลย Block Code" onerror="this.onerror=null; this.src='https://placehold.co/800x400?text=Solution+Image+Not+Found';">` : 
+                  '<div class="py-4 text-muted small"><i class="bi bi-image fs-1 d-block mb-2 text-black-50"></i>ยังไม่ได้อัปโหลดรูปภาพ Block Code เฉลยสำหรับบทเรียนนี้</div>'
+                }
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      teacherHtml = `
+        <div class="teacher-section p-4 my-4">
+          <div class="d-flex align-items-center gap-2 text-success mb-3 pb-2 border-bottom border-success-subtle">
+            <i class="bi bi-person-badge-fill fs-4"></i>
+            <h5 class="fw-bold mb-0 font-heading">สื่อและเอกสารสำหรับผู้สอน (โหมดคุณครู)</h5>
+          </div>
+          
+          <div class="row g-3">
+            <div class="${colClass}">
+              <div class="p-3 bg-white rounded-3 border h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <h6 class="fw-bold text-dark font-heading mb-1"><i class="bi bi-file-earmark-pdf-fill text-danger me-2"></i>คู่มือคำชี้แจงผู้สอน</h6>
+                  <p class="text-muted small mb-3">แนวทางการสอนและแผนกิจกรรม</p>
+                </div>
+                ${l.teacherPdfUrl ? `<a href="${l.teacherPdfUrl}" target="_blank" class="btn btn-danger btn-sm rounded-pill font-heading w-100"><i class="bi bi-download me-1"></i> ดาวน์โหลด PDF</a>` : '<span class="badge bg-light text-muted w-100 py-2">ยังไม่มีไฟล์คู่มือ</span>'}
+              </div>
+            </div>
+
+            <div class="${colClass}">
+              <div class="p-3 bg-white rounded-3 border h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <h6 class="fw-bold text-dark font-heading mb-1"><i class="bi bi-file-earmark-check-fill text-success me-2"></i>เฉลยใบกิจกรรม</h6>
+                  <p class="text-muted small mb-3">คำตอบเฉลยประจำบทเรียน</p>
+                </div>
+                ${l.answerSheetUrl ? `<a href="${l.answerSheetUrl}" target="_blank" class="btn btn-success btn-sm rounded-pill font-heading w-100"><i class="bi bi-file-earmark-text me-1"></i> ดูเฉลยใบงาน</a>` : '<span class="badge bg-light text-muted w-100 py-2">ยังไม่มีไฟล์เฉลย</span>'}
+              </div>
+            </div>
+
+            <div class="${colClass}">
+              <div class="p-3 bg-white rounded-3 border h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <h6 class="fw-bold text-dark font-heading mb-1"><i class="bi bi-clipboard2-data-fill text-warning me-2"></i>เกณฑ์คะแนนประเมิน</h6>
+                  <p class="text-muted small mb-3">ตารางเกณฑ์การให้คะแนน (Rubric)</p>
+                </div>
+                ${l.rubricUrl ? `<a href="${l.rubricUrl}" target="_blank" class="btn btn-warning text-dark btn-sm rounded-pill font-heading fw-semibold w-100"><i class="bi bi-download me-1"></i> ดาวน์โหลดเกณฑ์</a>` : '<span class="badge bg-light text-muted w-100 py-2">ยังไม่มีไฟล์เกณฑ์ประเมิน</span>'}
+              </div>
+            </div>
+
+            ${makeCodeAndSolutionHtml}
+          </div>
+        </div>
+      `;
+    }
+
+    let codeCheckerHtml = '';
+    if (chapNum !== 1) {
+      codeCheckerHtml = `
+        <div class="checker-hero-card mt-5">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="badge-check">
+              <i class="bi bi-check-circle-fill me-1"></i> Check
+            </span>
+            <h4 class="fw-bold font-heading mb-0 text-white">ระบบตรวจสอบ Block Code อัตโนมัติ สำหรับภารกิจ</h4>
+          </div>
+          <p class="text-white opacity-90 fs-6 mb-4">
+            คัดลอก Share Link จาก Microsoft MakeCode มาวางในช่องด้านล่าง เพื่อตรวจทานความถูกต้องของโค้ดก่อนทำการแฟลชลงหุ่นยนต์ ROBOCART
+          </p>
+          
+          <form onsubmit="handleInlineCheck(event, ${l.id})">
+            <div class="row g-2">
+              <div class="col-md-9">
+                <div class="input-group shadow-sm">
+                  <span class="input-group-text bg-white border-0 text-dark fs-5 px-3"><i class="bi bi-link-45deg"></i></span>
+                  <input type="url" class="form-control border-0 py-3 fs-6" id="inlineCheckUrl_${l.id}" placeholder="วางลิงก์ MakeCode ที่นี่ (เช่น https://makecode.microbit.org/S00000-...)" required>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <button type="submit" class="btn btn-checker-submit w-100 h-100 d-flex align-items-center justify-content-center gap-2 fs-6" id="btnInlineCheck_${l.id}">
+                  <i class="bi bi-cpu-fill fs-5"></i> ตรวจสอบโค้ด
+                </button>
+              </div>
+            </div>
+          </form>
+          <div id="inlineCheckResult_${l.id}"></div>
+        </div>
+      `;
+    }
+
+    let makeCodeBtnHtml = `
+      <div class="mb-4">
+        <a href="https://makecode.microbit.org/" target="_blank" rel="noopener noreferrer" class="btn-makecode-banner">
+          <div class="d-flex align-items-center gap-3">
+            <div class="bg-white bg-opacity-25 rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+              <i class="bi bi-code-square fs-2 text-white"></i>
+            </div>
+            <div>
+              <h5 class="fw-bold font-heading mb-1 text-white">เปิดโปรแกรม Microsoft MakeCode for micro:bit</h5>
+              <p class="mb-0 text-white-50 small">คลิกเพื่อเปิดหน้าต่างเขียนโปรแกรมและเริ่มทดสอบบล็อกคำสั่งหุ่นยนต์</p>
+            </div>
+          </div>
+          <div class="btn-action-pill flex-shrink-0 ms-3">
+            <span>เข้าสู่ MakeCode</span>
+            <i class="bi bi-box-arrow-up-right"></i>
+          </div>
+        </a>
+      </div>
+    `;
+
+    let html = `
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+        <div>
+          <span class="badge bg-primary-subtle text-primary mb-2 font-heading px-3 py-1 rounded-pill">บทเรียนที่ ${l.id}</span>
+          <h2 class="fw-bold text-dark font-heading mb-0 fs-2">${l.title}</h2>
+        </div>
+        ${l.worksheetUrl ? `<a href="${l.worksheetUrl}" target="_blank" class="btn btn-success rounded-pill font-heading px-4 py-2 fw-medium shadow-sm"><i class="bi bi-file-earmark-arrow-down-fill me-1"></i> ดาวน์โหลดใบงานนักเรียน</a>` : ''}
+      </div>
+      <p class="text-secondary fs-5 mb-4 leading-relaxed">${l.desc || ''}</p>
+
+      ${teacherHtml}
+      ${scenarioVidHtml}
+      ${extensionAlertHtml}
+      ${makeCodeBtnHtml}
+      ${reviewVidsHtml}
+      ${missionVidHtml}
+      ${codeCheckerHtml}
+    `;
+
+    document.getElementById('lessonContent').innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // =========================================================================
+  // ⚙️ ระบบ 3D Interactive Model (Three.js Physics Engine)
+  // =========================================================================
+  function initThreeJSModel() {
+    const container = document.getElementById('webgl-container');
+    if (!container) return;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xffffff);
+
+    const camera = new THREE.PerspectiveCamera(36, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const DEFAULT_CAM = new THREE.Vector3(4.5, 3.2, 5.6);
+    camera.position.copy(DEFAULT_CAM);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    container.appendChild(renderer.domElement);
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.minDistance = 2.8;
+    controls.maxDistance = 18;
+    controls.target.set(0, 0.2, 0);
+
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0xf1f5f9, 0.95);
+    hemiLight.position.set(0, 10, 0);
+    scene.add(hemiLight);
+
+    const mainDirLight = new THREE.DirectionalLight(0xffffff, 0.45);
+    mainDirLight.position.set(4, 10, 6);
+    mainDirLight.castShadow = true;
+    mainDirLight.shadow.mapSize.width = 1024;
+    mainDirLight.shadow.mapSize.height = 1024;
+    mainDirLight.shadow.radius = 4;
+    mainDirLight.shadow.bias = -0.0008;
+    scene.add(mainDirLight);
+
+    const bottomFillLight = new THREE.DirectionalLight(0xffffff, 0.4);
+    bottomFillLight.position.set(-3, -8, 4);
+    scene.add(bottomFillLight);
+
+    const shadowPlane = new THREE.Mesh(
+      new THREE.PlaneGeometry(18, 18),
+      new THREE.ShadowMaterial({ opacity: 0.08 })
+    );
+    shadowPlane.rotation.x = -Math.PI / 2;
+    shadowPlane.position.y = -0.76;
+    shadowPlane.receiveShadow = true;
+    scene.add(shadowPlane);
+
+    function vectorSurfaceMat(hexColor, roughness = 0.35, metalness = 0.05, opacity = 1.0, map = null) {
+      return new THREE.MeshStandardMaterial({
+        color: hexColor, roughness: roughness, metalness: metalness, transparent: opacity < 1.0, opacity: opacity, map: map
+      });
+    }
+
+    function createChassisTexture() {
+      const cvs = document.createElement('canvas');
+      cvs.width = 1024; cvs.height = 1024;
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = '#f4c318'; ctx.fillRect(0, 0, 1024, 1024);
+      ctx.fillStyle = '#232629';
+      ctx.fillRect(20, 120, 65, 780); ctx.fillRect(939, 120, 65, 780);
+      ctx.fillStyle = '#202225';
+      const drawSlot = (x, y, w, h, r = 18) => { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); };
+      drawSlot(140, 70, 280, 36, 16); drawSlot(604, 70, 280, 36, 16);
+      drawSlot(140, 918, 280, 36, 16); drawSlot(604, 918, 280, 36, 16);
+      for (let i = 0; i < 4; i++) {
+        drawSlot(180, 220 + i * 140, 260, 38, 16);
+        drawSlot(584, 220 + i * 140, 260, 38, 16);
+      }
+      const drawHole = (cx, cy, rad = 20) => { ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2); ctx.fill(); };
+      drawHole(512, 160, 24); drawHole(512, 860, 24); drawHole(340, 860, 18); drawHole(684, 860, 18);
+      ctx.save();
+      ctx.translate(512, 900); ctx.rotate(Math.PI);
+      ctx.fillStyle = '#1e2022'; ctx.font = 'bold 40px Prompt, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('ROBO BASE', 0, 15); ctx.font = 'bold 34px Prompt, sans-serif'; ctx.fillText('MINI', 0, -25);
+      ctx.restore();
+      ctx.fillStyle = '#1e2022'; ctx.beginPath(); ctx.roundRect(740, 880, 180, 48, 24); ctx.fill();
+      ctx.fillStyle = '#f4c318'; ctx.font = 'italic bold 30px Prompt, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('Cytron', 830, 914);
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.encoding = THREE.sRGBEncoding; tex.anisotropy = 4;
+      return tex;
+    }
+
+    function createRekabitTexture() {
+      const cvs = document.createElement('canvas');
+      cvs.width = 1024; cvs.height = 1024;
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = '#d43325'; ctx.fillRect(0, 0, 1024, 1024);
+      ctx.fillStyle = '#f8e6e4'; ctx.beginPath(); ctx.roundRect(45, 680, 440, 300, 20); ctx.fill();
+      ctx.fillStyle = '#d43325'; ctx.font = 'bold 28px Prompt, sans-serif';
+      ctx.fillText('OFF', 200, 955); ctx.fillText('ON', 415, 955); ctx.fillText('DC 3.6V-6V', 200, 735); ctx.fillText('POWER', 280, 735);
+      ctx.save(); ctx.translate(715, 810); ctx.rotate(-Math.PI / 2);
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 54px Prompt, sans-serif'; ctx.fillText('REKA:BIT', 0, 0); ctx.restore();
+      for (let i = 0; i < 12; i++) {
+        ctx.fillStyle = '#25282c'; ctx.fillRect(620, 140 + i * 48, 38, 24);
+        ctx.fillStyle = '#f59e0b'; ctx.fillRect(675, 140 + i * 48, 22, 22);
+      }
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 26px Prompt, sans-serif';
+      ctx.fillText('MOTOR 1', 260, 110); ctx.fillText('MOTOR 2', 450, 110);
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.encoding = THREE.sRGBEncoding; tex.anisotropy = 4;
+      return tex;
+    }
+
+    function createMicrobitTexture() {
+      const cvs = document.createElement('canvas');
+      cvs.width = 512; cvs.height = 1024;
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = '#1e2229'; ctx.fillRect(0, 0, 512, 1024);
+      ctx.fillStyle = '#1ca0e3'; ctx.beginPath(); ctx.moveTo(0, 720); ctx.lineTo(190, 910); ctx.lineTo(0, 1024); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = '#e5a93c'; ctx.lineWidth = 14; ctx.beginPath(); ctx.roundRect(45, 440, 56, 130, 28); ctx.stroke();
+      ctx.fillStyle = '#e5a93c'; ctx.beginPath(); ctx.arc(73, 475, 9, 0, Math.PI * 2); ctx.arc(73, 535, 9, 0, Math.PI * 2); ctx.fill();
+      for (let i = 0; i < 20; i++) {
+        ctx.fillStyle = '#d99b26'; ctx.fillRect(455, 60 + i * 46, 57, 28);
+      }
+      for (let i = 0; i < 5; i++) {
+        ctx.beginPath(); ctx.arc(445, 130 + i * 190, 34, 0, Math.PI * 2); ctx.fillStyle = '#d99b26'; ctx.fill();
+        ctx.beginPath(); ctx.arc(445, 130 + i * 190, 18, 0, Math.PI * 2); ctx.fillStyle = '#1e2229'; ctx.fill();
+      }
+      for (let r = 0; r < 5; r++) {
+        for (let c = 0; c < 5; c++) {
+          const lx = 175 + r * 44; const ly = 365 + c * 68;
+          ctx.fillStyle = '#d9a13b'; ctx.fillRect(lx, ly, 24, 34);
+          ctx.fillStyle = '#f8fafc'; ctx.fillRect(lx + 5, ly + 8, 14, 18);
+        }
+      }
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.encoding = THREE.sRGBEncoding; tex.anisotropy = 4;
+      return tex;
+    }
+
+    function createMakerLineTexture() {
+      const cvs = document.createElement('canvas');
+      cvs.width = 1024; cvs.height = 380;
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = '#5c2d73'; ctx.fillRect(0, 0, 1024, 380);
+      ctx.fillStyle = '#f1f5f9'; ctx.fillRect(90, 20, 844, 42);
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 42px Prompt, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('MAKER LINE', 580, 135);
+      const labels = ['S1', 'S2', 'S3', 'S4', 'S5'];
+      for (let i = 0; i < 5; i++) {
+        const bx = 160 + i * 155; const by = 185;
+        ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 6; ctx.beginPath(); ctx.roundRect(bx, by, 96, 145, 12); ctx.stroke();
+        ctx.fillStyle = '#ffffff'; ctx.font = 'bold 30px Prompt, sans-serif'; ctx.fillText(labels[i], bx + 48, by + 40);
+        ctx.fillStyle = '#f8fafc'; ctx.fillRect(bx + 26, by + 68, 44, 58);
+        ctx.fillStyle = '#94a3b8'; ctx.fillRect(bx + 34, by + 80, 28, 34);
+      }
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 5; ctx.strokeRect(55, 165, 65, 175); ctx.strokeRect(900, 165, 65, 175);
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.encoding = THREE.sRGBEncoding; tex.anisotropy = 4;
+      return tex;
+    }
+
+    function createUltrasonicTexture() {
+      const cvs = document.createElement('canvas');
+      cvs.width = 1024; cvs.height = 512;
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = '#1b5583'; ctx.fillRect(0, 0, 1024, 512);
+      ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 12;
+      ctx.beginPath(); ctx.arc(250, 265, 185, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.arc(774, 265, 185, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = '#ffffff'; ctx.font = 'bold 42px Prompt, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('HC-SR04', 512, 465);
+      ctx.font = 'bold 24px Prompt, sans-serif'; ctx.fillText('Vcc   Trig   Echo   Gnd', 512, 390);
+      for (let i = 0; i < 4; i++) {
+        ctx.fillStyle = '#cbd5e1'; ctx.beginPath(); ctx.arc(440 + i * 48, 418, 12, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.font = 'bold 44px Prompt, sans-serif'; ctx.fillText('T', 60, 90); ctx.fillText('R', 964, 90);
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.encoding = THREE.sRGBEncoding; tex.anisotropy = 4;
+      return tex;
+    }
+
+    const robotGroup = new THREE.Group();
+    scene.add(robotGroup);
+
+    const chassisTex = createChassisTexture();
+    const chassisTopMat = vectorSurfaceMat(0xffffff, 0.4, 0.05, 1.0, chassisTex);
+    const chassisSideMat = vectorSurfaceMat(0xe0ad12, 0.45, 0.05);
+    const chassisMats = [chassisSideMat, chassisSideMat, chassisTopMat, chassisTopMat, chassisSideMat, chassisSideMat];
+
+    const botDeck = new THREE.Mesh(new THREE.BoxGeometry(2.55, 0.08, 3.05), chassisMats);
+    botDeck.position.set(0, -0.42, 0);
+    botDeck.castShadow = true; botDeck.receiveShadow = true;
+    robotGroup.add(botDeck);
+
+    const topDeck = new THREE.Mesh(new THREE.BoxGeometry(2.55, 0.08, 2.95), chassisMats);
+    topDeck.position.set(0, 0.24, 0);
+    topDeck.castShadow = true; topDeck.receiveShadow = true;
+    robotGroup.add(topDeck);
+
+    const brassMat = vectorSurfaceMat(0xc89933, 0.3, 0.3);
+    const screwMat = vectorSurfaceMat(0xdbe2ea, 0.25, 0.4);
+    const pillarCoords = [[-1.12, -0.09, 1.32], [1.12, -0.09, 1.32], [-1.12, -0.09, -1.28], [1.12, -0.09, -1.28]];
+    pillarCoords.forEach(([px, py, pz]) => {
+      const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.58, 6), brassMat);
+      pillar.position.set(px, py, pz); robotGroup.add(pillar);
+      const topScrew = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.03, 16), screwMat);
+      topScrew.position.set(px, 0.295, pz); robotGroup.add(topScrew);
+      const botScrew = topScrew.clone(); botScrew.position.set(px, -0.475, pz); robotGroup.add(botScrew);
+    });
+
+    const battBox = new THREE.Mesh(new THREE.BoxGeometry(1.58, 0.44, 1.85), vectorSurfaceMat(0x212529, 0.6));
+    battBox.position.set(0, -0.14, 0.12); robotGroup.add(battBox);
+
+    const cellBlue = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 1.48, 16), vectorSurfaceMat(0x1d4ed8, 0.4));
+    cellBlue.rotation.z = Math.PI / 2; cellBlue.position.set(0, -0.12, 0.45); robotGroup.add(cellBlue);
+
+    const cellTip = new THREE.Mesh(new THREE.CylinderGeometry(0.162, 0.162, 0.38, 16), vectorSurfaceMat(0xd97706, 0.4));
+    cellTip.rotation.z = Math.PI / 2; cellTip.position.set(0.52, -0.12, 0.45); robotGroup.add(cellTip);
+
+    const yellowMotorMat = vectorSurfaceMat(0xfacc15, 0.4);
+    const whiteStrapMat = vectorSurfaceMat(0xe2e8f0, 0.4);
+    [-1, 1].forEach(dir => {
+      const mBody = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.44, 1.25), yellowMotorMat);
+      mBody.position.set(dir * 1.02, -0.02, -0.35); robotGroup.add(mBody);
+      const strap = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.48, 0.22), whiteStrapMat);
+      strap.position.set(dir * 1.02, -0.02, 0.08); robotGroup.add(strap);
+      const can = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.42, 16), vectorSurfaceMat(0x94a3b8, 0.35, 0.3));
+      can.rotation.x = Math.PI / 2; can.position.set(dir * 1.02, -0.02, 0.28); robotGroup.add(can);
+    });
+
+    function createVectorWheel(isRight) {
+      const wGroup = new THREE.Group();
+      const tireColor = vectorSurfaceMat(0x23272c, 0.7);
+      const treadDark = vectorSurfaceMat(0x16181b, 0.8);
+      const rimWhite = vectorSurfaceMat(0xf1f5f9, 0.3);
+      const rimShadow = vectorSurfaceMat(0xcbd5e1, 0.4);
+
+      const tireMain = new THREE.Mesh(new THREE.CylinderGeometry(0.76, 0.76, 0.36, 36), tireColor);
+      tireMain.rotation.z = Math.PI / 2; tireMain.castShadow = true; wGroup.add(tireMain);
+
+      const numTreads = 28;
+      for (let i = 0; i < numTreads; i++) {
+        const ang = (i / numTreads) * Math.PI * 2;
+        const tread = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.04, 0.09), treadDark);
+        tread.position.set(0.08, Math.sin(ang) * 0.755, Math.cos(ang) * 0.755);
+        tread.rotation.x = -ang; wGroup.add(tread);
+        const tread2 = tread.clone();
+        tread2.position.set(-0.08, Math.sin(ang + 0.11) * 0.755, Math.cos(ang + 0.11) * 0.755);
+        tread2.rotation.x = -(ang + 0.11); wGroup.add(tread2);
+      }
+      const rimOuter = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 0.37, 32), rimWhite);
+      rimOuter.rotation.z = Math.PI / 2; wGroup.add(rimOuter);
+      const rimInner = new THREE.Mesh(new THREE.CylinderGeometry(0.49, 0.49, 0.375, 32), rimShadow);
+      rimInner.rotation.z = Math.PI / 2; wGroup.add(rimInner);
+      const rimCenter = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.45, 0.38, 32), rimWhite);
+      rimCenter.rotation.z = Math.PI / 2; wGroup.add(rimCenter);
+
+      const holeMat = vectorSurfaceMat(0x334155, 0.7);
+      for (let i = 0; i < 8; i++) {
+        const a = (i / 8) * Math.PI * 2;
+        const hole = new THREE.Mesh(new THREE.CylinderGeometry(0.082, 0.082, 0.39, 16), holeMat);
+        hole.rotation.z = Math.PI / 2; hole.position.set(0, Math.sin(a) * 0.31, Math.cos(a) * 0.31); wGroup.add(hole);
+      }
+      const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.4, 16), rimShadow);
+      hub.rotation.z = Math.PI / 2; wGroup.add(hub);
+
+      wGroup.position.set(isRight ? 1.56 : -1.56, -0.02, -0.35); robotGroup.add(wGroup);
+    }
+    createVectorWheel(false); createVectorWheel(true);
+
+    const casterGroup = new THREE.Group();
+    casterGroup.position.set(0, -0.52, 0.82); robotGroup.add(casterGroup);
+    const casterMount = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.12, 0.55), vectorSurfaceMat(0xe2e8f0, 0.35));
+    casterGroup.add(casterMount);
+    const casterHousing = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.22, 0.22, 20), vectorSurfaceMat(0xcbd5e1, 0.4));
+    casterHousing.position.y = -0.1; casterGroup.add(casterHousing);
+    const steelBall = new THREE.Mesh(new THREE.SphereGeometry(0.17, 24, 24), vectorSurfaceMat(0x94a3b8, 0.25, 0.4));
+    steelBall.position.y = -0.15; casterGroup.add(steelBall);
+
+    const rekaGroup = new THREE.Group();
+    rekaGroup.position.set(0, 0.44, 0.08); robotGroup.add(rekaGroup);
+    [[-0.96, -0.1, 1.05], [0.96, -0.1, 1.05], [-0.96, -0.1, -1.05], [0.96, -0.1, -1.05]].forEach(([x, y, z]) => {
+      const sp = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.16, 6), brassMat);
+      sp.position.set(x, y, z); rekaGroup.add(sp);
+    });
+    const rekaTex = createRekabitTexture();
+    const rekaTopMat = vectorSurfaceMat(0xffffff, 0.4, 0.05, 1.0, rekaTex);
+    const rekaEdgeMat = vectorSurfaceMat(0xb91c1c, 0.5);
+    const rekaBoard = new THREE.Mesh(new THREE.BoxGeometry(2.18, 0.06, 2.35), [rekaEdgeMat, rekaEdgeMat, rekaTopMat, rekaEdgeMat, rekaEdgeMat, rekaEdgeMat]);
+    rekaBoard.castShadow = true; rekaGroup.add(rekaBoard);
+
+    const portCreamMat = vectorSurfaceMat(0xf3efe6, 0.4);
+    const portSlotMat = vectorSurfaceMat(0x334155, 0.8);
+    for (let i = 0; i < 6; i++) {
+      const pz = -0.82 + i * 0.31;
+      const port = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.22, 0.24), portCreamMat);
+      port.position.set(0.86, 0.13, pz); rekaGroup.add(port);
+      const portHole = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.12, 0.16), portSlotMat);
+      portHole.position.set(0.97, 0.14, pz); rekaGroup.add(portHole);
+    }
+    const dcSocket = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.28, 0.34), vectorSurfaceMat(0x26292e, 0.5));
+    dcSocket.position.set(-0.78, 0.16, 0.62); rekaGroup.add(dcSocket);
+    const slideSwitchBase = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.08, 0.18), vectorSurfaceMat(0.475569, 0.5));
+    slideSwitchBase.position.set(-0.14, 0.06, 0.86); rekaGroup.add(slideSwitchBase);
+    const slideKnob = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.14, 0.11), vectorSurfaceMat(0x1e293b, 0.6));
+    slideKnob.position.set(-0.2, 0.12, 0.86); rekaGroup.add(slideKnob);
+
+    const smdCapMat = vectorSurfaceMat(0xdbe2ea, 0.25, 0.5);
+    [0.58, 0.88].forEach(cz => {
+      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.2, 20), smdCapMat);
+      cap.position.set(0.12, 0.13, cz); rekaGroup.add(cap);
+      const ind = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.12, 0.18), vectorSurfaceMat(0x272a30, 0.6));
+      ind.position.set(0.36, 0.09, cz); rekaGroup.add(ind);
+    });
+    [-0.18, 0.22].forEach(tx => {
+      const tb = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.32, 0.28), vectorSurfaceMat(0x23272e, 0.6));
+      tb.position.set(tx, 0.18, -1.02); rekaGroup.add(tb);
+    });
+    const edgeSocket = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.34, 1.72), vectorSurfaceMat(0x26292e, 0.6));
+    edgeSocket.position.set(0.18, 0.2, -0.1); rekaGroup.add(edgeSocket);
+
+    const mbTex = createMicrobitTexture();
+    const mbTopMat = vectorSurfaceMat(0xffffff, 0.45, 0.05, 1.0, mbTex);
+    const mbDarkMat = vectorSurfaceMat(0x1e2229, 0.6);
+    const mbBoard = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.05, 1.62), [mbDarkMat, mbDarkMat, mbTopMat, mbDarkMat, mbDarkMat, mbDarkMat]);
+    mbBoard.position.set(-0.38, 0.22, -0.1); rekaGroup.add(mbBoard);
+
+    [-0.52, 0.32].forEach(bz => {
+      const btnBase = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.06, 0.18), vectorSurfaceMat(0x475569, 0.5));
+      btnBase.position.set(-0.22, 0.26, bz); rekaGroup.add(btnBase);
+      const btnCap = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.09, 16), vectorSurfaceMat(0x18181b, 0.7));
+      btnCap.position.set(-0.22, 0.28, bz); rekaGroup.add(btnCap);
+    });
+
+    const makerLineGroup = new THREE.Group();
+    makerLineGroup.position.set(0, -0.53, 1.42); robotGroup.add(makerLineGroup);
+    const mlTex = createMakerLineTexture();
+    const mlFaceMat = vectorSurfaceMat(0xffffff, 0.4, 0.05, 1.0, mlTex);
+    const mlPurpleMat = vectorSurfaceMat(0x5c2d73, 0.45);
+    const mlBoard = new THREE.Mesh(new THREE.BoxGeometry(2.12, 0.055, 0.68), [mlPurpleMat, mlPurpleMat, mlFaceMat, mlFaceMat, mlPurpleMat, mlPurpleMat]);
+    mlBoard.castShadow = true; makerLineGroup.add(mlBoard);
+    [-0.85, 0.85].forEach(mx => {
+      const mlNut = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.12, 12), screwMat);
+      mlNut.position.set(mx, 0.05, -0.18); makerLineGroup.add(mlNut);
+    });
+    for (let i = -2; i <= 2; i++) {
+      const ledChip = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.04, 0.11), vectorSurfaceMat(0xf8fafc, 0.3));
+      ledChip.position.set(i * 0.33, -0.04, 0.12); makerLineGroup.add(ledChip);
+    }
+
+    const frontSensorModule = new THREE.Group();
+    frontSensorModule.position.set(0, -0.08, 1.38); robotGroup.add(frontSensorModule);
+    const clearAcrylicMat = vectorSurfaceMat(0xe2e8f0, 0.2, 0.05, 0.72);
+    const servoMountPlate = new THREE.Mesh(new THREE.BoxGeometry(0.88, 0.05, 0.44), clearAcrylicMat);
+    servoMountPlate.position.set(0, 0.02, 0.12); frontSensorModule.add(servoMountPlate);
+
+    const servoBlueMat = vectorSurfaceMat(0x1d4ed8, 0.25, 0.1, 0.88);
+    const servoGearInsideMat = vectorSurfaceMat(0x60a5fa, 0.35, 0.1);
+    const servoBody = new THREE.Mesh(new THREE.BoxGeometry(0.54, 0.56, 0.28), servoBlueMat);
+    servoBody.position.set(0, -0.04, 0.12); servoBody.castShadow = true; frontSensorModule.add(servoBody);
+    const servoFlange = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.06, 0.28), servoBlueMat);
+    servoFlange.position.set(0, 0.06, 0.12); frontSensorModule.add(servoFlange);
+    const innerGear = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.12, 16), servoGearInsideMat);
+    innerGear.position.set(0, 0.12, 0.12); frontSensorModule.add(innerGear);
+    const servoBoss = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.14, 20), servoBlueMat);
+    servoBoss.position.set(0, 0.28, 0.12); frontSensorModule.add(servoBoss);
+
+    const servoPanGroup = new THREE.Group();
+    servoPanGroup.position.set(0, 0.36, 0.12); frontSensorModule.add(servoPanGroup);
+    const whiteHorn = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.06, 0.16), vectorSurfaceMat(0xf8fafc, 0.3));
+    servoPanGroup.add(whiteHorn);
+    const hornHub = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.08, 16), vectorSurfaceMat(0xf1f5f9, 0.3));
+    servoPanGroup.add(hornHub);
+    const acrylicBase = new THREE.Mesh(new THREE.BoxGeometry(1.42, 0.06, 0.42), clearAcrylicMat);
+    acrylicBase.position.set(0, 0.06, 0.02); servoPanGroup.add(acrylicBase);
+    const acrylicBackWall = new THREE.Mesh(new THREE.BoxGeometry(1.42, 0.72, 0.05), clearAcrylicMat);
+    acrylicBackWall.position.set(0, 0.42, -0.06); servoPanGroup.add(acrylicBackWall);
+
+    const sonarTex = createUltrasonicTexture();
+    const sonarFrontMat = vectorSurfaceMat(0xffffff, 0.4, 0.05, 1.0, sonarTex);
+    const sonarBlueMat = vectorSurfaceMat(0x1b5583, 0.45);
+    const sonarBoard = new THREE.Mesh(new THREE.BoxGeometry(1.38, 0.64, 0.05), [sonarBlueMat, sonarBlueMat, sonarBlueMat, sonarBlueMat, sonarFrontMat, sonarBlueMat]);
+    sonarBoard.position.set(0, 0.44, 0.0); sonarBoard.castShadow = true; servoPanGroup.add(sonarBoard);
+
+    const silverShellMat = vectorSurfaceMat(0xdbe2ea, 0.25, 0.45);
+    const darkMeshMat = vectorSurfaceMat(0x1e293b, 0.8);
+    const innerRingMat = vectorSurfaceMat(0x94a3b8, 0.4, 0.3);
+
+    [-0.36, 0.36].forEach(tx => {
+      const eyeGroup = new THREE.Group();
+      eyeGroup.position.set(tx, 0.43, 0.16);
+      const cylinder = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.32, 32), silverShellMat);
+      cylinder.rotation.x = Math.PI / 2; cylinder.castShadow = true; eyeGroup.add(cylinder);
+      const innerBezel = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.20, 0.33, 28), innerRingMat);
+      innerBezel.rotation.x = Math.PI / 2; eyeGroup.add(innerBezel);
+      const meshDisk = new THREE.Mesh(new THREE.CylinderGeometry(0.175, 0.175, 0.34, 24), darkMeshMat);
+      meshDisk.rotation.x = Math.PI / 2; eyeGroup.add(meshDisk);
+      servoPanGroup.add(eyeGroup);
+    });
+
+    const crystal = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.1, 0.06), silverShellMat);
+    crystal.position.set(0, 0.64, 0.04); servoPanGroup.add(crystal);
+    const pinBlock = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.18, 0.09), vectorSurfaceMat(0x1e293b, 0.6));
+    pinBlock.position.set(0, 0.82, -0.01); servoPanGroup.add(pinBlock);
+
+    const waveMat = new THREE.MeshBasicMaterial({ color: 0x00b4d8, transparent: true, depthWrite: false, side: THREE.DoubleSide });
+    const waves = [];
+    for (let wi = 0; wi < 4; wi++) {
+      const wr = new THREE.Mesh(new THREE.RingGeometry(0.25, 0.32, 32), waveMat.clone());
+      wr.position.set(0, 0.43, 0.3); servoPanGroup.add(wr); waves.push(wr);
+    }
+
+    const obsGroup = new THREE.Group(); scene.add(obsGroup); const obsList = [];
+    function addObstacle(geo, mat, x, y, z) {
+      const mesh = new THREE.Mesh(geo, mat); mesh.position.set(x, y, z);
+      mesh.castShadow = true; mesh.receiveShadow = true; obsGroup.add(mesh); obsList.push(mesh);
+    }
+    addObstacle(new THREE.BoxGeometry(1.6, 2.2, 1.2), vectorSurfaceMat(0xfb8500, 0.4), 0, 0.3, 4.8);
+    addObstacle(new THREE.CylinderGeometry(0.7, 0.7, 2.0, 24), vectorSurfaceMat(0x10b981, 0.4), -2.8, 0.2, 5.2);
+    addObstacle(new THREE.BoxGeometry(2.2, 2.5, 0.8), vectorSurfaceMat(0x8b5cf6, 0.4), 2.5, 0.45, 4.2);
+
+    const raycaster = new THREE.Raycaster();
+    const hitPointMarker = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), new THREE.MeshBasicMaterial({ color: 0xef4444 }));
+    hitPointMarker.visible = false; scene.add(hitPointMarker);
+
+    let currentServoDeg = 90; let lastMeasuredDistance = null; const maxSensorRange = 8.0;
+    const radarHistory = []; let time = 0;
+
+    function performSensing() {
+      const chkSonar = document.getElementById('chk-servosonar');
+      const chkObs = document.getElementById('chk-obstacles');
+      if (!chkSonar || !chkSonar.checked) {
+        if (document.getElementById('rc-dist')) document.getElementById('rc-dist').textContent = 'ปิดเซนเซอร์';
+        hitPointMarker.visible = false; return;
+      }
+      scene.updateMatrixWorld(true);
+      const origin = new THREE.Vector3(0, 0.43, 0.32); servoPanGroup.localToWorld(origin);
+      const direction = new THREE.Vector3(0, 0, 1); direction.transformDirection(servoPanGroup.matrixWorld).normalize();
+      let distance = null;
+      if (chkObs && chkObs.checked && obsGroup.visible) {
+        raycaster.set(origin, direction); raycaster.far = maxSensorRange;
+        const hits = raycaster.intersectObjects(obsList, false);
+        if (hits.length > 0) {
+          distance = hits[0].distance; hitPointMarker.position.copy(hits[0].point); hitPointMarker.visible = true;
+        } else { hitPointMarker.visible = false; }
+      } else { hitPointMarker.visible = false; }
+
+      lastMeasuredDistance = distance;
+      const distLabel = document.getElementById('rc-dist'); const angLabel = document.getElementById('rc-ang');
+      if (distLabel) {
+        if (distance !== null) { distLabel.textContent = `${(distance * 10).toFixed(1)} cm`; }
+        else { distLabel.textContent = (chkObs && chkObs.checked) ? 'เกินระยะ' : 'ปิดสิ่งกีดขวาง'; }
+      }
+
+      if (angLabel) {
+        let sideText = 'กลาง';
+        if (currentServoDeg < 80) sideText = 'ซ้าย'; else if (currentServoDeg > 100) sideText = 'ขวา';
+        angLabel.textContent = `มุม: ${Math.round(currentServoDeg)}° (${sideText})`;
+      }
+
+      if (distance !== null) {
+        radarHistory.push({ angle: currentServoDeg, dist: distance, time: time });
+        if (radarHistory.length > 250) radarHistory.shift();
+      }
+    }
+
+    const radarCanvas = document.getElementById('rc-radar');
+    const rg = radarCanvas ? radarCanvas.getContext('2d') : null;
+
+    function drawRadarUI() {
+      if (!radarCanvas || !rg) return;
+      const W = radarCanvas.width, H = radarCanvas.height;
+      const cx = W / 2, cy = H - 10, R = H - 15;
+      rg.clearRect(0, 0, W, H);
+      rg.strokeStyle = 'rgba(120,230,160,0.22)'; rg.lineWidth = 1.5;
+      for (let i = 1; i <= 3; i++) {
+        rg.beginPath(); rg.arc(cx, cy, R * i / 3, Math.PI, 2 * Math.PI); rg.stroke();
+      }
+      for (let a = 0; a <= 180; a += 45) {
+        const rad = Math.PI - (a * Math.PI / 180);
+        rg.beginPath(); rg.moveTo(cx, cy); rg.lineTo(cx + Math.cos(rad) * R, cy - Math.sin(rad) * R); rg.stroke();
+      }
+      const sweepRad = Math.PI - (currentServoDeg * Math.PI / 180);
+      const bx = cx + Math.cos(sweepRad) * R, by = cy - Math.sin(sweepRad) * R;
+      const gr = rg.createLinearGradient(cx, cy, bx, by);
+      gr.addColorStop(0, 'rgba(120,255,170,0.1)'); gr.addColorStop(1, 'rgba(120,255,170,0.95)');
+      rg.strokeStyle = gr; rg.lineWidth = 3; rg.beginPath(); rg.moveTo(cx, cy); rg.lineTo(bx, by); rg.stroke();
+
+      for (let k = radarHistory.length - 1; k >= 0; k--) {
+        const p = radarHistory[k]; const age = time - p.time;
+        if (age > 3.5) { radarHistory.splice(0, k + 1); break; }
+        const pr = Math.PI - (p.angle * Math.PI / 180), rr2 = (p.dist / maxSensorRange) * R;
+        rg.fillStyle = `rgba(255,183,3,${(1 - age / 3.5).toFixed(2)})`;
+        rg.beginPath(); rg.arc(cx + Math.cos(pr) * rr2, cy - Math.sin(pr) * rr2, 4.5, 0, Math.PI * 2); rg.fill();
+      }
+      rg.fillStyle = '#ffb703'; rg.beginPath(); rg.arc(cx, cy, 6, 0, Math.PI * 2); rg.fill();
+      rg.fillStyle = 'rgba(185,245,200,0.85)'; rg.font = '12px Prompt, sans-serif';
+      rg.textAlign = 'left'; rg.fillText('0°', 8, H - 2);
+      rg.textAlign = 'right'; rg.fillText('180°', W - 8, H - 2);
+    }
+
+    const chkMakerLine = document.getElementById('chk-makerline'), chkServoSonar = document.getElementById('chk-servosonar');
+    const chkObstacles = document.getElementById('chk-obstacles'), chkWaves = document.getElementById('chk-waves');
+    const badgeMakerLine = document.getElementById('badge-makerline'), badgeServoSonar = document.getElementById('badge-servosonar');
+    const servoControlPanel = document.getElementById('servo-control-panel'), rcRadarBox = document.getElementById('rc-radar-box');
+
+    function syncHardwareState() {
+      if (!chkMakerLine || !chkServoSonar) return;
+      const hasML = chkMakerLine.checked, hasSS = chkServoSonar.checked;
+      makerLineGroup.visible = hasML; if (badgeMakerLine) badgeMakerLine.style.display = hasML ? 'inline-block' : 'none';
+      frontSensorModule.visible = hasSS; if (badgeServoSonar) badgeServoSonar.style.display = hasSS ? 'inline-block' : 'none';
+      if (servoControlPanel) { servoControlPanel.style.opacity = hasSS ? '1' : '0.4'; servoControlPanel.style.pointerEvents = hasSS ? 'auto' : 'none'; }
+      if (rcRadarBox) { rcRadarBox.style.opacity = hasSS ? '1' : '0.4'; }
+      if (chkObstacles) obsGroup.visible = chkObstacles.checked;
+    }
+
+    const presetBtns = document.querySelectorAll('.preset-level-btn');
+    function highlightPreset(btnId) {
+      presetBtns.forEach(b => b.classList.remove('preset-active'));
+      if (btnId && document.getElementById(btnId)) document.getElementById(btnId).classList.add('preset-active');
+    }
+
+    if(document.getElementById('preset-base')) {
+      document.getElementById('preset-base').addEventListener('click', () => {
+        highlightPreset('preset-base'); chkMakerLine.checked = false; chkServoSonar.checked = false; syncHardwareState(); moveCameraTo(4.5, 3.2, 5.6, 0.2, 'cam-iso');
+      });
+      document.getElementById('preset-makerline').addEventListener('click', () => {
+        highlightPreset('preset-makerline'); chkMakerLine.checked = true; chkServoSonar.checked = false; syncHardwareState(); moveCameraTo(3.8, 2.2, 5.8, 0.1, 'cam-iso');
+      });
+      document.getElementById('preset-ultrasonic').addEventListener('click', () => {
+        highlightPreset('preset-ultrasonic'); chkMakerLine.checked = false; chkServoSonar.checked = true; syncHardwareState(); moveCameraTo(4.0, 2.6, 5.8, 0.2, 'cam-iso');
+      });
+      document.getElementById('preset-full').addEventListener('click', () => {
+        highlightPreset('preset-full'); chkMakerLine.checked = true; chkServoSonar.checked = true; syncHardwareState(); moveCameraTo(4.5, 3.2, 5.6, 0.2, 'cam-iso');
+      });
+    }
+
+    if (chkMakerLine) chkMakerLine.addEventListener('change', () => { highlightPreset(null); syncHardwareState(); });
+    if (chkServoSonar) chkServoSonar.addEventListener('change', () => { highlightPreset(null); syncHardwareState(); });
+    if (chkObstacles) chkObstacles.addEventListener('change', () => { obsGroup.visible = chkObstacles.checked; if (!chkObstacles.checked) radarHistory.length = 0; });
+
+    const sliderServo = document.getElementById('slider-servo'), servoAngleLabel = document.getElementById('servo-angle-label'), btnSweepToggle = document.getElementById('btn-sweep-toggle');
+    const actionBtns = [document.getElementById('btn-servo-0'), document.getElementById('btn-servo-90'), document.getElementById('btn-servo-180')];
+    let isServoSweeping = false, sweepDir = 1;
+
+    function setServoAngle(deg) {
+      currentServoDeg = Math.max(0, Math.min(180, deg));
+      servoPanGroup.rotation.y = THREE.MathUtils.degToRad(currentServoDeg - 90);
+      if (sliderServo) sliderServo.value = Math.round(currentServoDeg);
+      let labelStr = `${Math.round(currentServoDeg)}° (กลาง)`;
+      if (currentServoDeg < 80) labelStr = `${Math.round(currentServoDeg)}° (ซ้าย)`;
+      else if (currentServoDeg > 100) labelStr = `${Math.round(currentServoDeg)}° (ขวา)`;
+      if (servoAngleLabel) servoAngleLabel.textContent = `มุม: ${labelStr}`;
+      actionBtns.forEach(b => { if(b) b.classList.remove('active'); });
+      if (Math.round(currentServoDeg) === 0 && actionBtns[0]) actionBtns[0].classList.add('active');
+      if (Math.round(currentServoDeg) === 90 && actionBtns[1]) actionBtns[1].classList.add('active');
+      if (Math.round(currentServoDeg) === 180 && actionBtns[2]) actionBtns[2].classList.add('active');
+    }
+
+    if (sliderServo) sliderServo.addEventListener('input', (e) => { if (isServoSweeping) toggleServoSweep(false); setServoAngle(parseFloat(e.target.value)); });
+    if (actionBtns[0]) actionBtns[0].addEventListener('click', () => { toggleServoSweep(false); setServoAngle(0); });
+    if (actionBtns[1]) actionBtns[1].addEventListener('click', () => { toggleServoSweep(false); setServoAngle(90); });
+    if (actionBtns[2]) actionBtns[2].addEventListener('click', () => { toggleServoSweep(false); setServoAngle(180); });
+
+    function toggleServoSweep(state) {
+      isServoSweeping = state;
+      if (btnSweepToggle) {
+        btnSweepToggle.textContent = isServoSweeping ? 'หยุดสแกน' : 'สแกนอัตโนมัติ';
+        btnSweepToggle.classList.toggle('btn-primary', isServoSweeping);
+        btnSweepToggle.classList.toggle('btn-outline-primary', !isServoSweeping);
+      }
+    }
+    if (btnSweepToggle) btnSweepToggle.addEventListener('click', () => toggleServoSweep(!isServoSweeping));
+
+    const camBtns = document.querySelectorAll('.btn-cam-angle');
+    function setActiveCamBtn(btnId) { camBtns.forEach(b => b.classList.remove('active')); if (btnId && document.getElementById(btnId)) document.getElementById(btnId).classList.add('active'); }
+    function moveCameraTo(x, y, z, targetY = 0.2, activeBtnId = null) { camera.position.set(x, y, z); controls.target.set(0, targetY, 0); controls.update(); setActiveCamBtn(activeBtnId); }
+
+    if (document.getElementById('cam-iso')) document.getElementById('cam-iso').addEventListener('click', () => moveCameraTo(4.5, 3.2, 5.6, 0.2, 'cam-iso'));
+    if (document.getElementById('cam-front')) document.getElementById('cam-front').addEventListener('click', () => moveCameraTo(0, 1.6, 7.0, 0.2, 'cam-front'));
+    if (document.getElementById('cam-bottom')) document.getElementById('cam-bottom').addEventListener('click', () => moveCameraTo(0, -5.2, 4.2, -0.35, 'cam-bottom'));
+    if (document.getElementById('cam-side')) document.getElementById('cam-side').addEventListener('click', () => moveCameraTo(7.2, 0.4, 0, 0.1, 'cam-side'));
+    if (document.getElementById('cam-top')) document.getElementById('cam-top').addEventListener('click', () => moveCameraTo(0, 7.8, 0.05, 0, 'cam-top'));
+    if (document.getElementById('btn-reset-view')) document.getElementById('btn-reset-view').addEventListener('click', () => moveCameraTo(DEFAULT_CAM.x, DEFAULT_CAM.y, DEFAULT_CAM.z, 0.2, 'cam-iso'));
+
+    window.addEventListener('resize', () => {
+      if (!container) return;
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+
+    const clock = new THREE.Clock();
+    function animate() {
+      threeAnimationId = requestAnimationFrame(animate);
+      const delta = clock.getDelta(); time += delta;
+      if (isServoSweeping && chkServoSonar && chkServoSonar.checked) {
+        let nextDeg = currentServoDeg + sweepDir * delta * 95;
+        if (nextDeg >= 180) { nextDeg = 180; sweepDir = -1; }
+        else if (nextDeg <= 0) { nextDeg = 0; sweepDir = 1; }
+        setServoAngle(nextDeg);
+      }
+      performSensing();
+      const visWaves = chkWaves && chkServoSonar && chkWaves.checked && chkServoSonar.checked;
+      const waveMaxDist = (lastMeasuredDistance !== null) ? Math.min(lastMeasuredDistance, maxSensorRange) : maxSensorRange;
+      waves.forEach((w, i) => {
+        w.visible = visWaves; if (!visWaves) return;
+        const t = ((time * 1.6) + i / 4) % 1; w.position.z = 0.3 + t * waveMaxDist;
+        const s = 1.0 + t * waveMaxDist * 0.35; w.scale.set(s, s, 1);
+        w.material.opacity = (1 - t) * 0.75;
+      });
+      drawRadarUI(); controls.update(); renderer.render(scene, camera);
+    }
+
+    setServoAngle(90); syncHardwareState(); animate();
+  }
+</script>
+</body>
+</html>
